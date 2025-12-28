@@ -25,8 +25,8 @@
 *.pem
 
 # ide
-.idea
-.claude
+/.idea
+/.claude
 
 # debug
 npm-debug.log*

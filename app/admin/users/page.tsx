@@ -5,6 +5,7 @@ import { useUsers, useUpdateUserRoles, useDeleteUser } from '@/hooks/users/useUs
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { TableSkeleton } from '@/components/ui/skeleton';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -31,7 +32,14 @@ export default function AdminUsersPage() {
     return (
       <div className="space-y-6">
         <h1 className="text-3xl font-bold">Users</h1>
-        <div className="h-96 animate-pulse bg-neutral-200 dark:bg-neutral-800 rounded-lg" />
+        <Card>
+          <CardHeader>
+            <h2 className="text-xl font-semibold">All Users</h2>
+          </CardHeader>
+          <CardContent>
+            <TableSkeleton rows={10} columns={5} />
+          </CardContent>
+        </Card>
       </div>
     );
   }

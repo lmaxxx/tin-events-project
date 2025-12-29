@@ -6,6 +6,7 @@ import { useEvents } from '@/hooks/events/useEvents';
 import { useCategories } from '@/hooks/categories/useCategories';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { StatsCardSkeleton } from '@/components/ui/skeleton';
 
 export default function AdminDashboardPage() {
   const { data: usersData, isLoading: usersLoading } = useUsers(1, 1);
@@ -22,7 +23,11 @@ export default function AdminDashboardPage() {
     return (
       <div className="space-y-6">
         <h1 className="text-3xl font-bold">Dashboard</h1>
-        <div className="h-96 animate-pulse bg-neutral-200 dark:bg-neutral-800 rounded-lg" />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <StatsCardSkeleton />
+          <StatsCardSkeleton />
+          <StatsCardSkeleton />
+        </div>
       </div>
     );
   }

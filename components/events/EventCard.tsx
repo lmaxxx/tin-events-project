@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -26,11 +27,14 @@ export function EventCard({ event }: EventCardProps) {
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow">
       {event.imageUrl && (
-        <div className="aspect-video overflow-hidden bg-neutral-100 dark:bg-neutral-800">
-          <img
+        <div className="aspect-video overflow-hidden bg-neutral-100 dark:bg-neutral-800 relative">
+          <Image
             src={event.imageUrl}
             alt={event.title}
-            className="w-full h-full object-cover"
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            loading="lazy"
           />
         </div>
       )}

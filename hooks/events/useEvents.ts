@@ -132,14 +132,54 @@ export function useRegisterForEvent(eventId: string) {
 
   return useMutation({
     mutationFn: () => apiClient.post(`/api/events/${eventId}/register`),
+    onMutate: async () => {
+      // Cancel outgoing refetches
+      await queryClient.cancelQueries({ queryKey: ['events', eventId] });
+
+      // Snapshot previous value
+      const previousEvent = queryClient.getQueryData(['events', eventId]);
+
+      // Get current user
+      const authData = queryClient.getQueryData(['auth', 'me']) as { user: any } | undefined;
+
+      // Optimistically update event
+      queryClient.setQueryData(['events', eventId], (old: any) => {
+        if (!old?.event || !authData?.user) return old;
+
+        return {
+          ...old,
+          event: {
+            ...old.event,
+            visitorCount: old.event.visitorCount + 1,
+            visitors: [
+              ...(old.event.visitors || []),
+              {
+                id: authData.user.id,
+                name: authData.user.name,
+                email: authData.user.email,
+              },
+            ],
+          },
+        };
+      });
+
+      return { previousEvent };
+    },
+    onError: (error: any, _variables, context) => {
+      // Rollback to previous value
+      if (context?.previousEvent) {
+        queryClient.setQueryData(['events', eventId], context.previousEvent);
+      }
+      toast.error(error.message || 'Failed to register for event');
+    },
     onSuccess: () => {
+      toast.success('Registered for event successfully');
+    },
+    onSettled: () => {
+      // Refetch to ensure consistency
       queryClient.invalidateQueries({ queryKey: ['events'] });
       queryClient.invalidateQueries({ queryKey: ['events', eventId] });
       queryClient.invalidateQueries({ queryKey: ['my-registrations'] });
-      toast.success('Registered for event successfully');
-    },
-    onError: (error: any) => {
-      toast.error(error.message || 'Failed to register for event');
     },
   });
 }
@@ -150,14 +190,49 @@ export function useUnregisterFromEvent(eventId: string) {
 
   return useMutation({
     mutationFn: () => apiClient.delete(`/api/events/${eventId}/unregister`),
+    onMutate: async () => {
+      // Cancel outgoing refetches
+      await queryClient.cancelQueries({ queryKey: ['events', eventId] });
+
+      // Snapshot previous value
+      const previousEvent = queryClient.getQueryData(['events', eventId]);
+
+      // Get current user
+      const authData = queryClient.getQueryData(['auth', 'me']) as { user: any } | undefined;
+
+      // Optimistically update event
+      queryClient.setQueryData(['events', eventId], (old: any) => {
+        if (!old?.event || !authData?.user) return old;
+
+        return {
+          ...old,
+          event: {
+            ...old.event,
+            visitorCount: Math.max(0, old.event.visitorCount - 1),
+            visitors: (old.event.visitors || []).filter(
+              (v: any) => v.id !== authData.user.id
+            ),
+          },
+        };
+      });
+
+      return { previousEvent };
+    },
+    onError: (error: any, _variables, context) => {
+      // Rollback to previous value
+      if (context?.previousEvent) {
+        queryClient.setQueryData(['events', eventId], context.previousEvent);
+      }
+      toast.error(error.message || 'Failed to unregister from event');
+    },
     onSuccess: () => {
+      toast.success('Unregistered from event successfully');
+    },
+    onSettled: () => {
+      // Refetch to ensure consistency
       queryClient.invalidateQueries({ queryKey: ['events'] });
       queryClient.invalidateQueries({ queryKey: ['events', eventId] });
       queryClient.invalidateQueries({ queryKey: ['my-registrations'] });
-      toast.success('Unregistered from event successfully');
-    },
-    onError: (error: any) => {
-      toast.error(error.message || 'Failed to unregister from event');
     },
   });
 }

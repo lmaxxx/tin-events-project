@@ -5,6 +5,7 @@ import { useEvents } from '@/hooks/events/useEvents';
 import { EventCard } from '@/components/events/EventCard';
 import { EventFilters } from '@/components/events/EventFilters';
 import { Button } from '@/components/ui/button';
+import { EventCardSkeleton } from '@/components/ui/skeleton';
 
 export default function HomePage() {
   const [selectedCategory, setSelectedCategory] = useState<string | undefined>();
@@ -44,10 +45,7 @@ export default function HomePage() {
       {isLoading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[...Array(6)].map((_, i) => (
-            <div
-              key={i}
-              className="h-96 animate-pulse bg-neutral-200 dark:bg-neutral-800 rounded-lg"
-            />
+            <EventCardSkeleton key={i} />
           ))}
         </div>
       ) : data?.data && data.data.length > 0 ? (

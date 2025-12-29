@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { TableSkeleton } from '@/components/ui/skeleton';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -39,7 +40,14 @@ export default function AdminEventsPage() {
     return (
       <div className="space-y-6">
         <h1 className="text-3xl font-bold">Events</h1>
-        <div className="h-96 animate-pulse bg-neutral-200 dark:bg-neutral-800 rounded-lg" />
+        <Card>
+          <CardHeader>
+            <h2 className="text-xl font-semibold">All Events</h2>
+          </CardHeader>
+          <CardContent>
+            <TableSkeleton rows={10} columns={6} />
+          </CardContent>
+        </Card>
       </div>
     );
   }

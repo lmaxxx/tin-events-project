@@ -39,11 +39,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   }
 
   const navItems = [
+    { href: '/admin/dashboard', label: 'Dashboard' },
+    { href: '/admin/users', label: 'Users' },
+    { href: '/admin/events', label: 'Events' },
     { href: '/admin/categories', label: 'Categories' },
-    // Future admin pages can be added here
-    // { href: '/admin/users', label: 'Users' },
-    // { href: '/admin/events', label: 'Events' },
-    // { href: '/admin/dashboard', label: 'Dashboard' },
   ];
 
   return (

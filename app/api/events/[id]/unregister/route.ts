@@ -7,10 +7,10 @@ import type { ApiResponse } from '@/lib/types/auth';
 
 // DELETE /api/events/[id]/unregister - Unregister from event
 export const DELETE = withAuth(
-  async (req: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
+  async (req: NextRequest, context) => {
     try {
       const user = (req as any).user;
-      const { id } = await params;
+      const { id } = await context!.params;
 
       // Check if user is registered
       const [existingRegistration] = await db

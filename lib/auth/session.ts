@@ -1,5 +1,5 @@
 import { cookies } from 'next/headers';
-import { verifyToken, type JWTPayload } from './jwt';
+import { verifyToken, type AuthJWTPayload } from './jwt';
 import { db, users, userRoles, roles } from '@/db';
 import { eq } from 'drizzle-orm';
 

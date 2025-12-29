@@ -8,10 +8,10 @@ import type { ApiResponse } from '@/lib/types/auth';
 
 // POST /api/events/[id]/register - Register for event
 export const POST = withAuth(
-  async (req: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
+  async (req: NextRequest, context) => {
     try {
       const user = (req as any).user;
-      const { id } = await params;
+      const { id } = await context!.params;
 
       // Check if user can register for events
       if (!canRegisterForEvents(user)) {

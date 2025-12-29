@@ -85,10 +85,10 @@ export async function GET(
 
 // PATCH /api/events/[id] - Update event (owner or admin only)
 export const PATCH = withAuth(
-  async (req: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
+  async (req: NextRequest, context) => {
     try {
       const user = (req as any).user;
-      const { id } = await params;
+      const { id } = await context!.params;
 
       // Fetch event to check ownership
       const [existingEvent] = await db
@@ -182,10 +182,10 @@ export const PATCH = withAuth(
 
 // DELETE /api/events/[id] - Delete event (owner or admin only)
 export const DELETE = withAuth(
-  async (req: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
+  async (req: NextRequest, context) => {
     try {
       const user = (req as any).user;
-      const { id } = await params;
+      const { id } = await context!.params;
 
       // Fetch event to check ownership
       const [existingEvent] = await db

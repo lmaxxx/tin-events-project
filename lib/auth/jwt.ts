@@ -1,6 +1,6 @@
 import { SignJWT, jwtVerify } from 'jose';
 
-export interface JWTPayload {
+export interface AuthJWTPayload {
   userId: string;
   email: string;
   roles: string[];
@@ -9,7 +9,7 @@ export interface JWTPayload {
 const secret = new TextEncoder().encode(process.env.JWT_SECRET);
 const EXPIRATION_TIME = '7d';
 
-export async function generateToken(payload: JWTPayload): Promise<string> {
+export async function generateToken(payload: AuthJWTPayload): Promise<string> {
   if (!process.env.JWT_SECRET) {
     throw new Error('JWT_SECRET is not defined');
   }
@@ -23,14 +23,14 @@ export async function generateToken(payload: JWTPayload): Promise<string> {
   return token;
 }
 
-export async function verifyToken(token: string): Promise<JWTPayload | null> {
+export async function verifyToken(token: string): Promise<AuthJWTPayload | null> {
   if (!process.env.JWT_SECRET) {
     throw new Error('JWT_SECRET is not defined');
   }
 
   try {
     const { payload } = await jwtVerify(token, secret);
-    return payload as JWTPayload;
+    return payload as unknown as AuthJWTPayload;
   } catch (error) {
     console.error('JWT verification failed:', error);
     return null;

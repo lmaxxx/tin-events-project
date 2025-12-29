@@ -1,6 +1,6 @@
 import type { User, Role } from '@/db';
 
-export type { JWTPayload } from '../auth/jwt';
+export type { AuthJWTPayload } from '../auth/jwt';
 export type { UserWithRoles } from '../auth/session';
 
 export interface ApiResponse<T = any> {

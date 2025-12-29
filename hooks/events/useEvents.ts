@@ -1,0 +1,179 @@
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
+import { apiClient } from '@/lib/api/client';
+import type { CreateEventInput, UpdateEventInput } from '@/lib/validation/schemas';
+
+interface Event {
+  id: string;
+  title: string;
+  description: string;
+  date: string;
+  imageUrl: string | null;
+  capacity: number;
+  location: string;
+  createdAt: string;
+  updatedAt: string;
+  creator: {
+    id: string;
+    name: string;
+    email: string;
+  };
+  category: {
+    id: string;
+    name: string;
+    description: string | null;
+  };
+  visitorCount: number;
+  visitors?: Array<{
+    id: string;
+    name: string;
+    email: string;
+  }>;
+}
+
+interface EventsFilters {
+  page?: number;
+  pageSize?: number;
+  categoryId?: string;
+}
+
+// Get paginated events list
+export function useEvents(filters?: EventsFilters) {
+  const params = new URLSearchParams();
+  if (filters?.page) params.set('page', filters.page.toString());
+  if (filters?.pageSize) params.set('pageSize', filters.pageSize.toString());
+  if (filters?.categoryId) params.set('categoryId', filters.categoryId);
+
+  return useQuery({
+    queryKey: ['events', filters],
+    queryFn: () =>
+      apiClient.get<{
+        data: Event[];
+        pagination: {
+          page: number;
+          pageSize: number;
+          total: number;
+          totalPages: number;
+        };
+      }>(`/api/events?${params.toString()}`),
+  });
+}
+
+// Get single event
+export function useEvent(id: string) {
+  return useQuery({
+    queryKey: ['events', id],
+    queryFn: () => apiClient.get<{ event: Event }>(`/api/events/${id}`),
+    enabled: !!id,
+  });
+}
+
+// Create event
+export function useCreateEvent() {
+  const queryClient = useQueryClient();
+  const router = useRouter();
+
+  return useMutation({
+    mutationFn: (data: CreateEventInput) =>
+      apiClient.post<{ event: Event }>('/api/events', data),
+    onSuccess: (response) => {
+      queryClient.invalidateQueries({ queryKey: ['events'] });
+      toast.success('Event created successfully');
+      router.push(`/events/${response.event.id}`);
+    },
+    onError: (error: any) => {
+      toast.error(error.message || 'Failed to create event');
+    },
+  });
+}
+
+// Update event
+export function useUpdateEvent(id: string) {
+  const queryClient = useQueryClient();
+  const router = useRouter();
+
+  return useMutation({
+    mutationFn: (data: UpdateEventInput) =>
+      apiClient.patch<{ event: Event }>(`/api/events/${id}`, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['events'] });
+      queryClient.invalidateQueries({ queryKey: ['events', id] });
+      toast.success('Event updated successfully');
+      router.push(`/events/${id}`);
+    },
+    onError: (error: any) => {
+      toast.error(error.message || 'Failed to update event');
+    },
+  });
+}
+
+// Delete event
+export function useDeleteEvent() {
+  const queryClient = useQueryClient();
+  const router = useRouter();
+
+  return useMutation({
+    mutationFn: (id: string) => apiClient.delete(`/api/events/${id}`),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['events'] });
+      toast.success('Event deleted successfully');
+      router.push('/');
+    },
+    onError: (error: any) => {
+      toast.error(error.message || 'Failed to delete event');
+    },
+  });
+}
+
+// Register for event
+export function useRegisterForEvent(eventId: string) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: () => apiClient.post(`/api/events/${eventId}/register`),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['events'] });
+      queryClient.invalidateQueries({ queryKey: ['events', eventId] });
+      queryClient.invalidateQueries({ queryKey: ['my-registrations'] });
+      toast.success('Registered for event successfully');
+    },
+    onError: (error: any) => {
+      toast.error(error.message || 'Failed to register for event');
+    },
+  });
+}
+
+// Unregister from event
+export function useUnregisterFromEvent(eventId: string) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: () => apiClient.delete(`/api/events/${eventId}/unregister`),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['events'] });
+      queryClient.invalidateQueries({ queryKey: ['events', eventId] });
+      queryClient.invalidateQueries({ queryKey: ['my-registrations'] });
+      toast.success('Unregistered from event successfully');
+    },
+    onError: (error: any) => {
+      toast.error(error.message || 'Failed to unregister from event');
+    },
+  });
+}
+
+// Get user's created events
+export function useMyEvents() {
+  return useQuery({
+    queryKey: ['my-events'],
+    queryFn: () => apiClient.get<{ events: Event[] }>('/api/my/events'),
+  });
+}
+
+// Get user's event registrations
+export function useMyRegistrations() {
+  return useQuery({
+    queryKey: ['my-registrations'],
+    queryFn: () => apiClient.get<{ events: Event[] }>('/api/my/registrations'),
+  });
+}

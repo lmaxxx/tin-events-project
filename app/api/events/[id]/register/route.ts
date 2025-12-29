@@ -29,6 +29,12 @@ export const POST = withAuth(
         throw new NotFoundError('Event not found');
       }
 
+      // Check if event has already passed
+      const eventDate = new Date(event.date);
+      if (eventDate < new Date()) {
+        throw new ForbiddenError('Cannot register for past events');
+      }
+
       // Check if user is already registered
       const [existingRegistration] = await db
         .select()

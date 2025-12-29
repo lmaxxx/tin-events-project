@@ -48,15 +48,7 @@ export function useEvents(filters?: EventsFilters) {
   return useQuery({
     queryKey: ['events', filters],
     queryFn: () =>
-      apiClient.get<{
-        data: Event[];
-        pagination: {
-          page: number;
-          pageSize: number;
-          total: number;
-          totalPages: number;
-        };
-      }>(`/api/events?${params.toString()}`),
+      apiClient.get<Event[]>(`/api/events?${params.toString()}`),
   });
 }
 

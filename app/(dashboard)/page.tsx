@@ -26,6 +26,8 @@ export default function HomePage() {
     );
   }
 
+  console.log(data?.length)
+
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
@@ -48,35 +50,35 @@ export default function HomePage() {
             <EventCardSkeleton key={i} />
           ))}
         </div>
-      ) : data?.data && data.data.length > 0 ? (
+      ) : data && data?.length > 0 ? (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {data.data.map((event) => (
+            {data.map((event) => (
               <EventCard key={event.id} event={event} />
             ))}
           </div>
 
-          {data.pagination && data.pagination.totalPages > 1 && (
-            <div className="flex items-center justify-center gap-2 pt-4">
-              <Button
-                variant="outline"
-                onClick={() => setPage((p) => Math.max(1, p - 1))}
-                disabled={page === 1}
-              >
-                Previous
-              </Button>
-              <span className="text-sm text-neutral-600 dark:text-neutral-400">
-                Page {page} of {data.pagination.totalPages}
-              </span>
-              <Button
-                variant="outline"
-                onClick={() => setPage((p) => p + 1)}
-                disabled={page >= data.pagination.totalPages}
-              >
-                Next
-              </Button>
-            </div>
-          )}
+          {/*{data.pagination && data.pagination.totalPages > 1 && (*/}
+          {/*  <div className="flex items-center justify-center gap-2 pt-4">*/}
+          {/*    <Button*/}
+          {/*      variant="outline"*/}
+          {/*      onClick={() => setPage((p) => Math.max(1, p - 1))}*/}
+          {/*      disabled={page === 1}*/}
+          {/*    >*/}
+          {/*      Previous*/}
+          {/*    </Button>*/}
+          {/*    <span className="text-sm text-neutral-600 dark:text-neutral-400">*/}
+          {/*      Page {page} of {data.pagination.totalPages}*/}
+          {/*    </span>*/}
+          {/*    <Button*/}
+          {/*      variant="outline"*/}
+          {/*      onClick={() => setPage((p) => p + 1)}*/}
+          {/*      disabled={page >= data.pagination.totalPages}*/}
+          {/*    >*/}
+          {/*      Next*/}
+          {/*    </Button>*/}
+          {/*  </div>*/}
+          {/*)}*/}
         </>
       ) : (
         <div className="text-center py-12">

@@ -43,14 +43,6 @@ export function Navbar() {
             >
               {t('nav.events')}
             </Link>
-            {isOrganizer && (
-              <Link
-                href="/events/create"
-                className="text-sm text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100"
-              >
-                {t('nav.createEvent')}
-              </Link>
-            )}
             {user && (
               <Link
                 href="/my-events"
@@ -158,15 +150,6 @@ export function Navbar() {
             >
               {t('nav.events')}
             </Link>
-            {isOrganizer && (
-              <Link
-                href="/events/create"
-                className="block py-2 text-sm text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                {t('nav.createEvent')}
-              </Link>
-            )}
             <Link
               href="/my-events"
               className="block py-2 text-sm text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100"

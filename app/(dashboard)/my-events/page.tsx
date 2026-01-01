@@ -26,12 +26,14 @@ export default function MyEventsPage() {
   const t = useTranslations('events.myEvents');
   const tAuth = useTranslations('auth');
   const tCommon = useTranslations('common');
-  const [activeTab, setActiveTab] = useState<Tab>('created');
   const { data: authData } = useAuth();
   const { data: myEventsData, isLoading: myEventsLoading } = useMyEvents();
   const { data: myRegistrationsData, isLoading: myRegistrationsLoading } = useMyRegistrations();
 
   const user = authData?.user;
+  const isOrganizer = user?.roles.includes('organizer') || user?.roles.includes('admin');
+
+  const [activeTab, setActiveTab] = useState<Tab>(isOrganizer ? 'created' : 'registered');
 
   if (!user) {
     return (
@@ -55,23 +57,27 @@ export default function MyEventsPage() {
     <div className="space-y-8">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold">{t('title')}</h1>
-        <Button asChild>
-          <Link href="/events/create">{t('createButton')}</Link>
-        </Button>
+        {isOrganizer && (
+          <Button asChild>
+            <Link href="/events/create">{t('createButton')}</Link>
+          </Button>
+        )}
       </div>
 
       {/* Tab Navigation */}
       <div className="flex gap-2 border-b">
-        <button
-          onClick={() => setActiveTab('created')}
-          className={`px-4 py-2 font-medium border-b-2 transition-colors ${
-            activeTab === 'created'
-              ? 'border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400'
-              : 'border-transparent text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100'
-          }`}
-        >
-          {t('tabs.created', { count: myEvents.length })}
-        </button>
+        {isOrganizer && (
+          <button
+            onClick={() => setActiveTab('created')}
+            className={`px-4 py-2 font-medium border-b-2 transition-colors ${
+              activeTab === 'created'
+                ? 'border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400'
+                : 'border-transparent text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100'
+            }`}
+          >
+            {t('tabs.created', { count: myEvents.length })}
+          </button>
+        )}
         <button
           onClick={() => setActiveTab('registered')}
           className={`px-4 py-2 font-medium border-b-2 transition-colors ${
@@ -85,7 +91,7 @@ export default function MyEventsPage() {
       </div>
 
       {/* Created Events Tab */}
-      {activeTab === 'created' && (
+      {isOrganizer && activeTab === 'created' && (
         <div>
           {isLoading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

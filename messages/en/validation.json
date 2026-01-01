@@ -1,0 +1,57 @@
+{
+  "email": {
+    "invalid": "Invalid email address",
+    "required": "Email is required"
+  },
+  "password": {
+    "required": "Password is required",
+    "minLength": "Password must be at least {min} characters",
+    "maxLength": "Password must be less than {max} characters",
+    "lowercase": "Password must contain at least one lowercase letter",
+    "uppercase": "Password must contain at least one uppercase letter",
+    "number": "Password must contain at least one number",
+    "special": "Password must contain at least one special character"
+  },
+  "name": {
+    "minLength": "Name must be at least {min} characters",
+    "maxLength": "Name must be less than {max} characters"
+  },
+  "event": {
+    "title": {
+      "minLength": "Title must be at least {min} characters",
+      "maxLength": "Title must be less than {max} characters"
+    },
+    "description": {
+      "minLength": "Description must be at least {min} characters",
+      "maxLength": "Description must be less than {max} characters"
+    },
+    "date": {
+      "invalid": "Invalid date format"
+    },
+    "capacity": {
+      "integer": "Capacity must be a whole number",
+      "min": "Capacity must be at least {min}",
+      "max": "Capacity must be less than {max}"
+    },
+    "location": {
+      "minLength": "Location must be at least {min} characters",
+      "maxLength": "Location must be less than {max} characters"
+    },
+    "category": {
+      "required": "Category is required"
+    },
+    "imageUrl": {
+      "invalid": "Invalid URL",
+      "protocol": "Only HTTP and HTTPS URLs are allowed"
+    }
+  },
+  "category": {
+    "name": {
+      "minLength": "Name must be at least {min} characters",
+      "maxLength": "Name must be less than {max} characters"
+    },
+    "description": {
+      "maxLength": "Description must be less than {max} characters"
+    }
+  }
+}

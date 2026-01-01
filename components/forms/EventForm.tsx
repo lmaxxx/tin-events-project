@@ -2,7 +2,7 @@
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { createEventSchema, type CreateEventInput } from '@/lib/validation/schemas';
+import { eventSchema, type CreateEventInput } from '@/lib/validation/schemas';
 import { useCategories } from '@/hooks/categories/useCategories';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -27,7 +27,7 @@ export function EventForm({ defaultValues, onSubmit, isLoading, submitText = 'Cr
     watch,
     formState: { errors },
   } = useForm<CreateEventInput>({
-    resolver: zodResolver(createEventSchema),
+    resolver: zodResolver(eventSchema),
     defaultValues: {
       title: defaultValues?.title || '',
       description: defaultValues?.description || '',

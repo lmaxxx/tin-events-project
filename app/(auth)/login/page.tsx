@@ -3,7 +3,8 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
-import { loginSchema, type LoginInput } from '@/lib/validation/schemas';
+import { useTranslations } from 'next-intl';
+import { createLoginSchema, type LoginInput } from '@/lib/validation/schemas';
 import { useLogin } from '@/hooks/auth/useAuth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -11,6 +12,9 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 
 export default function LoginPage() {
+  const t = useTranslations();
+  const tAuth = useTranslations('auth.login');
+  const tFields = useTranslations('auth.fields');
   const login = useLogin();
 
   const {
@@ -18,7 +22,7 @@ export default function LoginPage() {
     handleSubmit,
     formState: { errors },
   } = useForm<LoginInput>({
-    resolver: zodResolver(loginSchema),
+    resolver: zodResolver(createLoginSchema(t)),
   });
 
   const onSubmit = (data: LoginInput) => {
@@ -29,19 +33,19 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-neutral-50 dark:bg-neutral-950 p-4">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <h1 className="text-2xl font-bold">Login</h1>
+          <h1 className="text-2xl font-bold">{tAuth('title')}</h1>
           <p className="text-sm text-neutral-600 dark:text-neutral-400">
-            Enter your credentials to access your account
+            {tAuth('description')}
           </p>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">{tFields('email')}</Label>
               <Input
                 id="email"
                 type="email"
-                placeholder="you@example.com"
+                placeholder={tFields('emailPlaceholder')}
                 {...register('email')}
                 aria-invalid={errors.email ? 'true' : 'false'}
               />
@@ -53,11 +57,11 @@ export default function LoginPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">{tFields('password')}</Label>
               <Input
                 id="password"
                 type="password"
-                placeholder="••••••••"
+                placeholder={tFields('passwordPlaceholder')}
                 {...register('password')}
                 aria-invalid={errors.password ? 'true' : 'false'}
               />
@@ -73,18 +77,18 @@ export default function LoginPage() {
               className="w-full"
               disabled={login.isPending}
             >
-              {login.isPending ? 'Logging in...' : 'Login'}
+              {login.isPending ? tAuth('buttonLoading') : tAuth('button')}
             </Button>
 
             <div className="text-center text-sm">
               <span className="text-neutral-600 dark:text-neutral-400">
-                Don't have an account?{' '}
+                {tAuth('noAccount')}{' '}
               </span>
               <Link
                 href="/register"
                 className="text-blue-600 hover:underline dark:text-blue-400"
               >
-                Register
+                {tAuth('registerLink')}
               </Link>
             </div>
           </form>

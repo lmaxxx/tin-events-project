@@ -1,0 +1,54 @@
+{
+  "nav": {
+    "brand": "Events Platform",
+    "events": "Events",
+    "createEvent": "Create Event",
+    "myEvents": "My Events",
+    "admin": "Admin",
+    "adminDashboard": "Admin Dashboard",
+    "login": "Login",
+    "register": "Register"
+  },
+  "actions": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "view": "View",
+    "viewDetails": "View Details",
+    "search": "Search",
+    "filter": "Filter",
+    "submit": "Submit",
+    "back": "Back",
+    "backToEvents": "Back to Events",
+    "backToHome": "Back to Home",
+    "tryAgain": "Try Again",
+    "loading": "Loading...",
+    "saving": "Saving...",
+    "deleting": "Deleting...",
+    "creating": "Creating...",
+    "updating": "Updating..."
+  },
+  "fields": {
+    "date": "Date",
+    "dateTime": "Date & Time",
+    "time": "Time",
+    "location": "Location",
+    "category": "Category",
+    "capacity": "Capacity",
+    "organizer": "Organizer"
+  },
+  "theme": {
+    "light": "Light Mode",
+    "dark": "Dark Mode"
+  },
+  "status": {
+    "full": "Full",
+    "eventFull": "Event Full"
+  },
+  "misc": {
+    "attendees": "{count, plural, =0 {No attendees} =1 {1 attendee} other {# attendees}}",
+    "unknown": "Unknown",
+    "optional": "optional"
+  }
+}

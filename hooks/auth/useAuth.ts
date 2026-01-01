@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import { apiClient } from '@/lib/api/client';
 import type { AuthResponse, UserWithRoles } from '@/lib/types/auth';
@@ -16,6 +17,7 @@ export function useAuth() {
 
 // Login mutation
 export function useLogin() {
+  const t = useTranslations('errors.toast');
   const queryClient = useQueryClient();
   const router = useRouter();
 
@@ -24,18 +26,19 @@ export function useLogin() {
       apiClient.post<AuthResponse>('/api/auth/login', credentials),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['auth'] });
-      toast.success('Logged in successfully');
+      toast.success(t('loginSuccess'));
       router.push('/');
       router.refresh();
     },
     onError: (error: any) => {
-      toast.error(error.message || 'Login failed');
+      toast.error(error.message || t('loginFailed'));
     },
   });
 }
 
 // Register mutation
 export function useRegister() {
+  const t = useTranslations('errors.toast');
   const queryClient = useQueryClient();
   const router = useRouter();
 
@@ -44,18 +47,19 @@ export function useRegister() {
       apiClient.post<AuthResponse>('/api/auth/register', data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['auth'] });
-      toast.success('Account created successfully');
+      toast.success(t('registerSuccess'));
       router.push('/');
       router.refresh();
     },
     onError: (error: any) => {
-      toast.error(error.message || 'Registration failed');
+      toast.error(error.message || t('registerFailed'));
     },
   });
 }
 
 // Logout mutation
 export function useLogout() {
+  const t = useTranslations('errors.toast');
   const queryClient = useQueryClient();
   const router = useRouter();
 
@@ -63,12 +67,12 @@ export function useLogout() {
     mutationFn: () => apiClient.post('/api/auth/logout'),
     onSuccess: () => {
       queryClient.clear();
-      toast.success('Logged out successfully');
+      toast.success(t('logoutSuccess'));
       router.push('/login');
       router.refresh();
     },
     onError: (error: any) => {
-      toast.error(error.message || 'Logout failed');
+      toast.error(error.message || t('logoutFailed'));
     },
   });
 }

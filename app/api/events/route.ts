@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { db, events, users, eventCategories, eventVisitors } from '@/db';
 import { eq, desc, count, sql } from 'drizzle-orm';
 import { withAuth } from '@/lib/auth/middleware';
-import { createEventSchema } from '@/lib/validation/schemas';
+import { eventSchema } from '@/lib/validation/schemas';
 import { canCreateEvent } from '@/lib/auth/permissions';
 import { ForbiddenError, handleApiError } from '@/lib/errors';
 import type { ApiResponse, PaginatedResponse } from '@/lib/types/auth';
@@ -111,7 +111,7 @@ export const POST = withAuth(
       const body = await req.json();
 
       // Validate request body
-      const validationResult = createEventSchema.safeParse(body);
+      const validationResult = eventSchema.safeParse(body);
       if (!validationResult.success) {
         return NextResponse.json<ApiResponse>(
           {

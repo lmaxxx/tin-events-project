@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import { apiClient } from '@/lib/api/client';
 import type { CreateEventInput, UpdateEventInput } from '@/lib/validation/schemas';
@@ -63,6 +64,7 @@ export function useEvent(id: string) {
 
 // Create event
 export function useCreateEvent() {
+  const t = useTranslations('errors.toast');
   const queryClient = useQueryClient();
   const router = useRouter();
 
@@ -71,17 +73,18 @@ export function useCreateEvent() {
       apiClient.post<{ event: Event }>('/api/events', data),
     onSuccess: (response) => {
       queryClient.invalidateQueries({ queryKey: ['events'] });
-      toast.success('Event created successfully');
+      toast.success(t('eventCreated'));
       router.push(`/events/${response.event.id}`);
     },
     onError: (error: any) => {
-      toast.error(error.message || 'Failed to create event');
+      toast.error(error.message || t('eventCreateFailed'));
     },
   });
 }
 
 // Update event
 export function useUpdateEvent(id: string) {
+  const t = useTranslations('errors.toast');
   const queryClient = useQueryClient();
   const router = useRouter();
 
@@ -91,17 +94,18 @@ export function useUpdateEvent(id: string) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['events'] });
       queryClient.invalidateQueries({ queryKey: ['events', id] });
-      toast.success('Event updated successfully');
+      toast.success(t('eventUpdated'));
       router.push(`/events/${id}`);
     },
     onError: (error: any) => {
-      toast.error(error.message || 'Failed to update event');
+      toast.error(error.message || t('eventUpdateFailed'));
     },
   });
 }
 
 // Delete event
 export function useDeleteEvent() {
+  const t = useTranslations('errors.toast');
   const queryClient = useQueryClient();
   const router = useRouter();
 
@@ -109,17 +113,18 @@ export function useDeleteEvent() {
     mutationFn: (id: string) => apiClient.delete(`/api/events/${id}`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['events'] });
-      toast.success('Event deleted successfully');
+      toast.success(t('eventDeleted'));
       router.push('/');
     },
     onError: (error: any) => {
-      toast.error(error.message || 'Failed to delete event');
+      toast.error(error.message || t('eventDeleteFailed'));
     },
   });
 }
 
 // Register for event
 export function useRegisterForEvent(eventId: string) {
+  const t = useTranslations('errors.toast');
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -162,10 +167,10 @@ export function useRegisterForEvent(eventId: string) {
       if (context?.previousEvent) {
         queryClient.setQueryData(['events', eventId], context.previousEvent);
       }
-      toast.error(error.message || 'Failed to register for event');
+      toast.error(error.message || t('eventRegisterFailed'));
     },
     onSuccess: () => {
-      toast.success('Registered for event successfully');
+      toast.success(t('eventRegistered'));
     },
     onSettled: () => {
       // Refetch to ensure consistency
@@ -178,6 +183,7 @@ export function useRegisterForEvent(eventId: string) {
 
 // Unregister from event
 export function useUnregisterFromEvent(eventId: string) {
+  const t = useTranslations('errors.toast');
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -215,10 +221,10 @@ export function useUnregisterFromEvent(eventId: string) {
       if (context?.previousEvent) {
         queryClient.setQueryData(['events', eventId], context.previousEvent);
       }
-      toast.error(error.message || 'Failed to unregister from event');
+      toast.error(error.message || t('eventUnregisterFailed'));
     },
     onSuccess: () => {
-      toast.success('Unregistered from event successfully');
+      toast.success(t('eventUnregistered'));
     },
     onSettled: () => {
       // Refetch to ensure consistency

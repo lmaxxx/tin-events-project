@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 
 export default function Error({
@@ -10,6 +11,8 @@ export default function Error({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const t = useTranslations('errors.page');
+
   useEffect(() => {
     // Log error to console or error reporting service
     console.error('Application error:', error);
@@ -36,10 +39,10 @@ export default function Error({
           </div>
 
           <h2 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-100 mb-2">
-            Something Went Wrong
+            {t('title')}
           </h2>
           <p className="text-neutral-600 dark:text-neutral-400 mb-1">
-            We encountered an unexpected error. This has been logged and we'll look into it.
+            {t('description')}
           </p>
           {error.message && (
             <p className="text-sm text-neutral-500 dark:text-neutral-500 mt-4 font-mono bg-neutral-100 dark:bg-neutral-900 p-3 rounded">
@@ -50,16 +53,16 @@ export default function Error({
 
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Button onClick={reset} size="lg">
-            Try Again
+            {t('tryAgain')}
           </Button>
           <Button asChild variant="outline" size="lg">
-            <a href="/">Back to Home</a>
+            <a href="/">{t('backToHome')}</a>
           </Button>
         </div>
 
         <div className="mt-8 pt-8 border-t border-neutral-200 dark:border-neutral-800">
           <p className="text-sm text-neutral-500 dark:text-neutral-500">
-            If this problem persists, please contact support.
+            {t('persist')}
           </p>
         </div>
       </div>

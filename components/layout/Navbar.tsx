@@ -4,6 +4,8 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useAuth, useLogout } from '@/hooks/auth/useAuth';
 import { useTheme } from '@/hooks/useTheme';
+import { useTranslations } from 'next-intl';
+import { LanguageSelector } from '@/components/layout/LanguageSelector';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -17,6 +19,8 @@ export function Navbar() {
   const { data: authData, isLoading } = useAuth();
   const logout = useLogout();
   const { theme, toggleTheme } = useTheme();
+  const t = useTranslations('common');
+  const tAuth = useTranslations('auth');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const user = authData?.user;
@@ -28,7 +32,7 @@ export function Navbar() {
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         <div className="flex items-center gap-6">
           <Link href="/" className="text-xl font-bold">
-            Events Platform
+            {t('nav.brand')}
           </Link>
 
           <div className="hidden md:flex items-center gap-4">
@@ -36,14 +40,14 @@ export function Navbar() {
               href="/"
               className="text-sm text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100"
             >
-              Events
+              {t('nav.events')}
             </Link>
             {isOrganizer && (
               <Link
                 href="/events/create"
                 className="text-sm text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100"
               >
-                Create Event
+                {t('nav.createEvent')}
               </Link>
             )}
             {user && (
@@ -51,7 +55,7 @@ export function Navbar() {
                 href="/my-events"
                 className="text-sm text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100"
               >
-                My Events
+                {t('nav.myEvents')}
               </Link>
             )}
             {isAdmin && (
@@ -59,13 +63,16 @@ export function Navbar() {
                 href="/admin"
                 className="text-sm text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100"
               >
-                Admin
+                {t('nav.admin')}
               </Link>
             )}
           </div>
         </div>
 
         <div className="flex items-center gap-2">
+          {/* Language Selector */}
+          <LanguageSelector />
+
           {/* Theme Toggle */}
           <Button variant="ghost" size="sm" onClick={toggleTheme} className="hidden sm:flex">
             {theme === 'dark' ? (
@@ -112,11 +119,11 @@ export function Navbar() {
                   </div>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
-                    <Link href="/my-events">My Events</Link>
+                    <Link href="/my-events">{t('nav.myEvents')}</Link>
                   </DropdownMenuItem>
                   {isAdmin && (
                     <DropdownMenuItem asChild>
-                      <Link href="/admin/dashboard">Admin Dashboard</Link>
+                      <Link href="/admin/dashboard">{t('nav.adminDashboard')}</Link>
                     </DropdownMenuItem>
                   )}
                   <DropdownMenuSeparator />
@@ -124,7 +131,7 @@ export function Navbar() {
                     onClick={() => logout.mutate()}
                     disabled={logout.isPending}
                   >
-                    {logout.isPending ? 'Logging out...' : 'Logout'}
+                    {logout.isPending ? tAuth('loggingOut') : tAuth('logout')}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -149,10 +156,10 @@ export function Navbar() {
           ) : (
             <div className="flex items-center gap-2">
               <Button variant="ghost" size="sm" asChild className="hidden sm:flex">
-                <Link href="/login">Login</Link>
+                <Link href="/login">{t('nav.login')}</Link>
               </Button>
               <Button size="sm" asChild>
-                <Link href="/register">Register</Link>
+                <Link href="/register">{t('nav.register')}</Link>
               </Button>
             </div>
           )}
@@ -168,7 +175,7 @@ export function Navbar() {
               className="block py-2 text-sm text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100"
               onClick={() => setMobileMenuOpen(false)}
             >
-              Events
+              {t('nav.events')}
             </Link>
             {isOrganizer && (
               <Link
@@ -176,7 +183,7 @@ export function Navbar() {
                 className="block py-2 text-sm text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Create Event
+                {t('nav.createEvent')}
               </Link>
             )}
             <Link
@@ -184,7 +191,7 @@ export function Navbar() {
               className="block py-2 text-sm text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100"
               onClick={() => setMobileMenuOpen(false)}
             >
-              My Events
+              {t('nav.myEvents')}
             </Link>
             {isAdmin && (
               <Link
@@ -192,7 +199,7 @@ export function Navbar() {
                 className="block py-2 text-sm text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Admin
+                {t('nav.admin')}
               </Link>
             )}
             <div className="pt-2 border-t">
@@ -200,7 +207,7 @@ export function Navbar() {
                 onClick={toggleTheme}
                 className="w-full text-left py-2 text-sm text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100"
               >
-                {theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
+                {theme === 'dark' ? t('theme.light') : t('theme.dark')}
               </button>
               <button
                 onClick={() => {
@@ -209,7 +216,7 @@ export function Navbar() {
                 }}
                 className="w-full text-left py-2 text-sm text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100"
               >
-                Logout
+                {tAuth('logout')}
               </button>
             </div>
           </div>

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { useUsers, useUpdateUserRoles, useDeleteUser } from '@/hooks/users/useUsers';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
@@ -21,6 +22,7 @@ import {
 const AVAILABLE_ROLES = ['guest', 'user', 'organizer', 'admin'];
 
 export default function AdminUsersPage() {
+  const t = useTranslations('admin.users');
   const [page, setPage] = useState(1);
   const { data, isLoading } = useUsers(page, 20);
   const [editingUserId, setEditingUserId] = useState<string | null>(null);
@@ -31,10 +33,10 @@ export default function AdminUsersPage() {
   if (isLoading) {
     return (
       <div className="space-y-6">
-        <h1 className="text-3xl font-bold">Users</h1>
+        <h1 className="text-3xl font-bold">{t('title')}</h1>
         <Card>
           <CardHeader>
-            <h2 className="text-xl font-semibold">All Users</h2>
+            <h2 className="text-xl font-semibold">{t('title')}</h2>
           </CardHeader>
           <CardContent>
             <TableSkeleton rows={10} columns={5} />
@@ -47,26 +49,26 @@ export default function AdminUsersPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">Users</h1>
+        <h1 className="text-3xl font-bold">{t('title')}</h1>
         <div className="text-sm text-neutral-600 dark:text-neutral-400">
-          Total: {pagination?.total || 0} users
+          {t('total', { count: pagination?.total || 0 })}
         </div>
       </div>
 
       <Card>
         <CardHeader>
-          <h2 className="text-xl font-semibold">All Users</h2>
+          <h2 className="text-xl font-semibold">{t('title')}</h2>
         </CardHeader>
         <CardContent>
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
                 <tr className="border-b">
-                  <th className="text-left py-3 px-4 font-medium">Name</th>
-                  <th className="text-left py-3 px-4 font-medium">Email</th>
-                  <th className="text-left py-3 px-4 font-medium">Roles</th>
-                  <th className="text-left py-3 px-4 font-medium">Created</th>
-                  <th className="text-right py-3 px-4 font-medium">Actions</th>
+                  <th className="text-left py-3 px-4 font-medium">{t('tableHeaders.name')}</th>
+                  <th className="text-left py-3 px-4 font-medium">{t('tableHeaders.email')}</th>
+                  <th className="text-left py-3 px-4 font-medium">{t('tableHeaders.roles')}</th>
+                  <th className="text-left py-3 px-4 font-medium">{t('tableHeaders.created')}</th>
+                  <th className="text-right py-3 px-4 font-medium">{t('tableHeaders.actions')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -89,7 +91,7 @@ export default function AdminUsersPage() {
                           <div className="flex items-center gap-2">
                             {user.roles.map((role) => (
                               <Badge key={role} variant="default">
-                                {role}
+                                {t(`roles.${role}` as any)}
                               </Badge>
                             ))}
                           </div>
@@ -106,7 +108,7 @@ export default function AdminUsersPage() {
                               size="sm"
                               onClick={() => setEditingUserId(user.id)}
                             >
-                              Edit Roles
+                              {t('actions.editRoles')}
                             </Button>
                             <DeleteUserButton userId={user.id} />
                           </div>
@@ -117,7 +119,7 @@ export default function AdminUsersPage() {
                 ) : (
                   <tr>
                     <td colSpan={5} className="py-12 text-center text-neutral-600 dark:text-neutral-400">
-                      No users found.
+                      {t('empty')}
                     </td>
                   </tr>
                 )}
@@ -132,17 +134,17 @@ export default function AdminUsersPage() {
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
                 disabled={page === 1}
               >
-                Previous
+                {t('pagination.previous')}
               </Button>
               <span className="text-sm text-neutral-600 dark:text-neutral-400">
-                Page {page} of {pagination.totalPages}
+                {t('pagination.page', { current: page, total: pagination.totalPages })}
               </span>
               <Button
                 variant="outline"
                 onClick={() => setPage((p) => p + 1)}
                 disabled={page >= pagination.totalPages}
               >
-                Next
+                {t('pagination.next')}
               </Button>
             </div>
           )}
@@ -163,6 +165,7 @@ function EditRolesForm({
   onCancel: () => void;
   onSuccess: () => void;
 }) {
+  const t = useTranslations('admin.users');
   const [selectedRoles, setSelectedRoles] = useState<string[]>(currentRoles);
   const updateRolesMutation = useUpdateUserRoles(userId);
 
@@ -197,7 +200,7 @@ function EditRolesForm({
                 : 'bg-neutral-200 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400'
             }`}
           >
-            {role}
+            {t(`roles.${role}` as any)}
           </button>
         ))}
       </div>
@@ -207,10 +210,10 @@ function EditRolesForm({
           onClick={handleSave}
           disabled={updateRolesMutation.isPending || selectedRoles.length === 0}
         >
-          {updateRolesMutation.isPending ? 'Saving...' : 'Save'}
+          {t('actions.save')}
         </Button>
         <Button size="sm" variant="ghost" onClick={onCancel}>
-          Cancel
+          {t('actions.cancel')}
         </Button>
       </div>
     </div>
@@ -218,6 +221,7 @@ function EditRolesForm({
 }
 
 function DeleteUserButton({ userId }: { userId: string }) {
+  const t = useTranslations('admin.users');
   const deleteMutation = useDeleteUser();
 
   const handleDelete = async () => {
@@ -232,25 +236,24 @@ function DeleteUserButton({ userId }: { userId: string }) {
     <AlertDialog>
       <AlertDialogTrigger asChild>
         <Button variant="destructive" size="sm">
-          Delete
+          {t('actions.delete')}
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Delete User?</AlertDialogTitle>
+          <AlertDialogTitle>{t('deleteDialog.title')}</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete the user account
-            and all associated data.
+            {t('deleteDialog.description')}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel>{t('deleteDialog.cancel')}</AlertDialogCancel>
           <AlertDialogAction
             onClick={handleDelete}
             className="bg-red-600 hover:bg-red-700"
             disabled={deleteMutation.isPending}
           >
-            {deleteMutation.isPending ? 'Deleting...' : 'Delete'}
+            {t('deleteDialog.confirm')}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

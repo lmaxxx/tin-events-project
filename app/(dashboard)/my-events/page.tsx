@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { useAuth } from '@/hooks/auth/useAuth';
 import { useMyEvents, useMyRegistrations, useUnregisterFromEvent } from '@/hooks/events/useEvents';
 import { EventCard } from '@/components/events/EventCard';
@@ -22,6 +23,9 @@ import {
 type Tab = 'created' | 'registered';
 
 export default function MyEventsPage() {
+  const t = useTranslations('events.myEvents');
+  const tAuth = useTranslations('auth');
+  const tCommon = useTranslations('common');
   const [activeTab, setActiveTab] = useState<Tab>('created');
   const { data: authData } = useAuth();
   const { data: myEventsData, isLoading: myEventsLoading } = useMyEvents();
@@ -32,12 +36,12 @@ export default function MyEventsPage() {
   if (!user) {
     return (
       <div className="text-center py-12">
-        <h1 className="text-2xl font-bold mb-2">Authentication Required</h1>
+        <h1 className="text-2xl font-bold mb-2">{tAuth('authRequired')}</h1>
         <p className="text-neutral-600 dark:text-neutral-400 mb-4">
-          Please log in to view your events.
+          {tAuth('pleaseLogin', { action: tAuth('actions.viewEvents') })}
         </p>
         <Button asChild>
-          <Link href="/login">Go to Login</Link>
+          <Link href="/login">{tAuth('goToLogin')}</Link>
         </Button>
       </div>
     );
@@ -50,9 +54,9 @@ export default function MyEventsPage() {
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">My Events</h1>
+        <h1 className="text-3xl font-bold">{t('title')}</h1>
         <Button asChild>
-          <Link href="/events/create">Create Event</Link>
+          <Link href="/events/create">{t('createButton')}</Link>
         </Button>
       </div>
 
@@ -66,7 +70,7 @@ export default function MyEventsPage() {
               : 'border-transparent text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100'
           }`}
         >
-          Created Events ({myEvents.length})
+          {t('tabs.created', { count: myEvents.length })}
         </button>
         <button
           onClick={() => setActiveTab('registered')}
@@ -76,7 +80,7 @@ export default function MyEventsPage() {
               : 'border-transparent text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100'
           }`}
         >
-          Registered Events ({myRegistrations.length})
+          {t('tabs.registered', { count: myRegistrations.length })}
         </button>
       </div>
 
@@ -102,10 +106,10 @@ export default function MyEventsPage() {
             <Card>
               <CardContent className="py-12 text-center">
                 <p className="text-neutral-600 dark:text-neutral-400 mb-4">
-                  You haven't created any events yet.
+                  {t('emptyStates.noCreated')}
                 </p>
                 <Button asChild>
-                  <Link href="/events/create">Create Your First Event</Link>
+                  <Link href="/events/create">{t('emptyStates.createFirst')}</Link>
                 </Button>
               </CardContent>
             </Card>
@@ -135,10 +139,10 @@ export default function MyEventsPage() {
             <Card>
               <CardContent className="py-12 text-center">
                 <p className="text-neutral-600 dark:text-neutral-400 mb-4">
-                  You haven't registered for any events yet.
+                  {t('emptyStates.noRegistered')}
                 </p>
                 <Button asChild>
-                  <Link href="/">Browse Events</Link>
+                  <Link href="/">{t('emptyStates.browseEvents')}</Link>
                 </Button>
               </CardContent>
             </Card>
@@ -150,6 +154,8 @@ export default function MyEventsPage() {
 }
 
 function RegisteredEventCard({ event }: { event: any }) {
+  const tDetail = useTranslations('events.detail');
+  const tCommon = useTranslations('common');
   const unregisterMutation = useUnregisterFromEvent(event.id);
 
   const eventDate = new Date(event.date);
@@ -216,28 +222,28 @@ function RegisteredEventCard({ event }: { event: any }) {
         </div>
         <div className="flex gap-2">
           <Button asChild className="flex-1">
-            <Link href={`/events/${event.id}`}>View Details</Link>
+            <Link href={`/events/${event.id}`}>{tCommon('actions.viewDetails')}</Link>
           </Button>
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button variant="outline" size="sm">
-                Unregister
+                {tDetail('unregister')}
               </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>Unregister from Event?</AlertDialogTitle>
+                <AlertDialogTitle>{tDetail('unregisterDialog.title')}</AlertDialogTitle>
                 <AlertDialogDescription>
-                  Are you sure you want to unregister from this event? You can register again later if spots are available.
+                  {tDetail('unregisterDialog.description')}
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogCancel>{tDetail('unregisterDialog.cancel')}</AlertDialogCancel>
                 <AlertDialogAction
                   onClick={() => unregisterMutation.mutate()}
                   className="bg-red-600 hover:bg-red-700"
                 >
-                  Unregister
+                  {tDetail('unregisterDialog.confirm')}
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>

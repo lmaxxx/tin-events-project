@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { useEvents } from '@/hooks/events/useEvents';
 import { EventCard } from '@/components/events/EventCard';
 import { EventFilters } from '@/components/events/EventFilters';
@@ -8,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { EventCardSkeleton } from '@/components/ui/skeleton';
 
 export default function HomePage() {
+  const t = useTranslations('events.list');
   const [selectedCategory, setSelectedCategory] = useState<string | undefined>();
   const [page, setPage] = useState(1);
   const pageSize = 12;
@@ -21,7 +23,7 @@ export default function HomePage() {
   if (error) {
     return (
       <div className="text-center py-12">
-        <p className="text-red-600 dark:text-red-400">Failed to load events</p>
+        <p className="text-red-600 dark:text-red-400">{t('failedToLoad')}</p>
       </div>
     );
   }
@@ -32,9 +34,9 @@ export default function HomePage() {
     <div className="space-y-8">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Discover Events</h1>
+          <h1 className="text-3xl font-bold">{t('title')}</h1>
           <p className="text-neutral-600 dark:text-neutral-400 mt-1">
-            Find and join amazing events in your area
+            {t('description')}
           </p>
         </div>
       </div>
@@ -83,7 +85,7 @@ export default function HomePage() {
       ) : (
         <div className="text-center py-12">
           <p className="text-neutral-600 dark:text-neutral-400">
-            No events found. Try changing your filters.
+            {t('noEvents')}
           </p>
         </div>
       )}

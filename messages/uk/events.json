@@ -1,0 +1,82 @@
+{
+  "list": {
+    "title": "Відкрийте події",
+    "description": "Знайдіть і приєднайтеся до чудових подій у вашому районі",
+    "noEvents": "Події не знайдено. Спробуйте змінити фільтри.",
+    "failedToLoad": "Не вдалося завантажити події"
+  },
+  "detail": {
+    "backToEvents": "← Назад до подій",
+    "notFound": "Подію не знайдено",
+    "edit": "Редагувати",
+    "delete": "Видалити",
+    "register": "Зареєструватися на подію",
+    "registering": "Реєстрація...",
+    "unregister": "Скасувати реєстрацію",
+    "unregistering": "Скасування реєстрації...",
+    "eventFull": "Подія заповнена",
+    "loginToRegister": "Увійдіть, щоб зареєструватися",
+    "deleteDialog": {
+      "title": "Видалити подію?",
+      "description": "Цю дію неможливо скасувати. Це назавжди видалить подію та всі реєстрації.",
+      "cancel": "Скасувати",
+      "confirm": "Видалити"
+    },
+    "unregisterDialog": {
+      "title": "Скасувати реєстрацію на подію?",
+      "description": "Ви впевнені, що хочете скасувати реєстрацію на цю подію? Ви можете зареєструватися знову пізніше, якщо будуть доступні місця.",
+      "cancel": "Скасувати",
+      "confirm": "Скасувати реєстрацію"
+    }
+  },
+  "create": {
+    "title": "Створити нову подію",
+    "cardTitle": "Деталі події",
+    "cardDescription": "Заповніть інформацію нижче, щоб створити нову подію.",
+    "submitButton": "Створити подію",
+    "back": "← Назад"
+  },
+  "edit": {
+    "title": "Редагувати подію",
+    "cardTitle": "Деталі події",
+    "cardDescription": "Оновіть інформацію нижче, щоб змінити вашу подію.",
+    "submitButton": "Оновити подію",
+    "back": "← Назад",
+    "notFound": "Подію не знайдено",
+    "insufficientPermissions": "Недостатньо прав",
+    "onlyCreatorCanEdit": "Ви можете редагувати лише події, які створили самі.",
+    "backToEvent": "Назад до події"
+  },
+  "myEvents": {
+    "title": "Мої події",
+    "createButton": "Створити подію",
+    "tabs": {
+      "created": "Створені події ({count})",
+      "registered": "Зареєстровані події ({count})"
+    },
+    "emptyStates": {
+      "noCreated": "Ви ще не створили жодної події.",
+      "createFirst": "Створити вашу першу подію",
+      "noRegistered": "Ви ще не зареєструвалися на жодну подію.",
+      "browseEvents": "Переглянути події"
+    }
+  },
+  "form": {
+    "title": "Назва події",
+    "titlePlaceholder": "Введіть назву події",
+    "description": "Опис",
+    "descriptionPlaceholder": "Опишіть вашу подію",
+    "dateTime": "Дата і час",
+    "capacity": "Місткість",
+    "capacityPlaceholder": "Максимальна кількість учасників",
+    "location": "Місце",
+    "locationPlaceholder": "Місце події або адреса",
+    "imageUrl": "URL зображення (необов'язково)",
+    "imageUrlPlaceholder": "https://example.com/image.jpg",
+    "category": "Категорія",
+    "categoryPlaceholder": "Виберіть категорію"
+  },
+  "filters": {
+    "allCategories": "Всі категорії"
+  }
+}

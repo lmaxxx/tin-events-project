@@ -1,0 +1,61 @@
+{
+  "page": {
+    "title": "Щось пішло не так",
+    "description": "Ми зіткнулися з неочікуваною помилкою. Це було зареєстровано, і ми подивимося на це.",
+    "persist": "Якщо ця проблема не зникне, зверніться до служби підтримки.",
+    "tryAgain": "Спробувати знову",
+    "backToHome": "На головну"
+  },
+  "notFound": {
+    "code": "404",
+    "title": "Сторінку не знайдено",
+    "description": "Вибачте, ми не змогли знайти сторінку, яку ви шукаєте. Можливо, її було видалено, перейменовано або вона не існує.",
+    "help": "Загубилися? Спробуйте перейти з",
+    "homepage": "головної сторінки",
+    "or": "або",
+    "yourEvents": "ваших подій",
+    "backToHome": "На головну",
+    "createEvent": "Створити подію"
+  },
+  "api": {
+    "validationFailed": "Помилка валідації",
+    "notFound": "{resource} не знайдено",
+    "alreadyExists": "{resource} з таким {field} вже існує",
+    "noPermission": "Ви не маєте дозволу на {action}",
+    "alreadyRegistered": "Ви вже зареєстровані на цю подію",
+    "eventFull": "Подія заповнена",
+    "eventPast": "Не можна зареєструватися на минулі події",
+    "notRegistered": "Ви не зареєстровані на цю подію",
+    "onlyOrganizerOrAdmin": "Тільки організатори та адміністратори можуть {action}"
+  },
+  "toast": {
+    "loginSuccess": "Успішний вхід",
+    "loginFailed": "Помилка входу",
+    "registerSuccess": "Обліковий запис створено успішно",
+    "registerFailed": "Помилка реєстрації",
+    "logoutSuccess": "Успішний вихід",
+    "logoutFailed": "Помилка виходу",
+    "eventCreated": "Подію створено успішно",
+    "eventCreateFailed": "Не вдалося створити подію",
+    "eventUpdated": "Подію оновлено успішно",
+    "eventUpdateFailed": "Не вдалося оновити подію",
+    "eventDeleted": "Подію видалено успішно",
+    "eventDeleteFailed": "Не вдалося видалити подію",
+    "eventRegistered": "Успішно зареєстровано на подію",
+    "eventRegisterFailed": "Не вдалося зареєструватися на подію",
+    "eventUnregistered": "Реєстрацію на подію скасовано успішно",
+    "eventUnregisterFailed": "Не вдалося скасувати реєстрацію на подію",
+    "categoryCreated": "Категорію створено успішно",
+    "categoryCreateFailed": "Не вдалося створити категорію",
+    "categoryUpdated": "Категорію оновлено успішно",
+    "categoryUpdateFailed": "Не вдалося оновити категорію",
+    "categoryDeleted": "Категорію видалено успішно",
+    "categoryDeleteFailed": "Не вдалося видалити категорію",
+    "userUpdated": "Користувача оновлено успішно",
+    "userUpdateFailed": "Не вдалося оновити користувача",
+    "userRolesUpdated": "Ролі користувача оновлено успішно",
+    "userRolesUpdateFailed": "Не вдалося оновити ролі користувача",
+    "userDeleted": "Користувача видалено успішно",
+    "userDeleteFailed": "Не вдалося видалити користувача"
+  }
+}

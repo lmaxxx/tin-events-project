@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { useEvents, useDeleteEvent } from '@/hooks/events/useEvents';
 import { useCategories } from '@/hooks/categories/useCategories';
 import { Button } from '@/components/ui/button';
@@ -22,6 +23,8 @@ import {
 } from '@/components/ui/alert-dialog';
 
 export default function AdminEventsPage() {
+  const t = useTranslations('admin.events');
+  const tCommon = useTranslations('common');
   const [page, setPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState<string | undefined>();
   const pageSize = 20;
@@ -33,16 +36,16 @@ export default function AdminEventsPage() {
   });
   const { data: categories } = useCategories();
 
-  const events = eventsData?.data || [];
-  const pagination = eventsData?.pagination;
+  const events = Array.isArray(eventsData) ? eventsData : [];
+  const pagination = undefined; // Pagination not available in current implementation
 
   if (isLoading) {
     return (
       <div className="space-y-6">
-        <h1 className="text-3xl font-bold">Events</h1>
+        <h1 className="text-3xl font-bold">{t('title')}</h1>
         <Card>
           <CardHeader>
-            <h2 className="text-xl font-semibold">All Events</h2>
+            <h2 className="text-xl font-semibold">{t('allEvents')}</h2>
           </CardHeader>
           <CardContent>
             <TableSkeleton rows={10} columns={6} />
@@ -55,7 +58,7 @@ export default function AdminEventsPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">Events</h1>
+        <h1 className="text-3xl font-bold">{t('title')}</h1>
         <div className="flex items-center gap-4">
           <Select
             value={selectedCategory || 'all'}
@@ -65,10 +68,10 @@ export default function AdminEventsPage() {
             }}
           >
             <SelectTrigger className="w-[200px]">
-              <SelectValue placeholder="All Categories" />
+              <SelectValue placeholder={t('allEvents')} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Categories</SelectItem>
+              <SelectItem value="all">{t('allEvents')}</SelectItem>
               {categories?.map((category) => (
                 <SelectItem key={category.id} value={category.id}>
                   {category.name}
@@ -81,19 +84,19 @@ export default function AdminEventsPage() {
 
       <Card>
         <CardHeader>
-          <h2 className="text-xl font-semibold">All Events</h2>
+          <h2 className="text-xl font-semibold">{t('allEvents')}</h2>
         </CardHeader>
         <CardContent>
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
                 <tr className="border-b">
-                  <th className="text-left py-3 px-4 font-medium">Title</th>
-                  <th className="text-left py-3 px-4 font-medium">Category</th>
-                  <th className="text-left py-3 px-4 font-medium">Creator</th>
-                  <th className="text-left py-3 px-4 font-medium">Date</th>
-                  <th className="text-left py-3 px-4 font-medium">Attendees</th>
-                  <th className="text-right py-3 px-4 font-medium">Actions</th>
+                  <th className="text-left py-3 px-4 font-medium">{t('tableHeaders.title')}</th>
+                  <th className="text-left py-3 px-4 font-medium">{t('tableHeaders.category')}</th>
+                  <th className="text-left py-3 px-4 font-medium">{t('tableHeaders.creator')}</th>
+                  <th className="text-left py-3 px-4 font-medium">{t('tableHeaders.date')}</th>
+                  <th className="text-left py-3 px-4 font-medium">{t('tableHeaders.attendees')}</th>
+                  <th className="text-right py-3 px-4 font-medium">{t('tableHeaders.actions')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -109,7 +112,7 @@ export default function AdminEventsPage() {
                           <Badge>{event.category.name}</Badge>
                         </td>
                         <td className="py-3 px-4 text-neutral-600 dark:text-neutral-400">
-                          {event.creator?.name || 'Unknown'}
+                          {event.creator?.name || tCommon('misc.unknown')}
                         </td>
                         <td className="py-3 px-4 text-sm text-neutral-600 dark:text-neutral-400">
                           {eventDate.toLocaleDateString()}
@@ -117,13 +120,13 @@ export default function AdminEventsPage() {
                         <td className="py-3 px-4">
                           <span className={isFull ? 'text-red-600 dark:text-red-400 font-medium' : ''}>
                             {event.visitorCount}/{event.capacity}
-                            {isFull && ' (Full)'}
+                            {isFull && ` (${tCommon('status.full')})`}
                           </span>
                         </td>
                         <td className="py-3 px-4 text-right">
                           <div className="flex items-center justify-end gap-2">
                             <Button variant="outline" size="sm" asChild>
-                              <Link href={`/events/${event.id}`}>View</Link>
+                              <Link href={`/events/${event.id}`}>{t('actions.view')}</Link>
                             </Button>
                             <DeleteEventButton eventId={event.id} />
                           </div>
@@ -134,35 +137,13 @@ export default function AdminEventsPage() {
                 ) : (
                   <tr>
                     <td colSpan={6} className="py-12 text-center text-neutral-600 dark:text-neutral-400">
-                      No events found.
+                      {t('empty')}
                     </td>
                   </tr>
                 )}
               </tbody>
             </table>
           </div>
-
-          {pagination && pagination.totalPages > 1 && (
-            <div className="flex items-center justify-center gap-2 pt-6 mt-6 border-t">
-              <Button
-                variant="outline"
-                onClick={() => setPage((p) => Math.max(1, p - 1))}
-                disabled={page === 1}
-              >
-                Previous
-              </Button>
-              <span className="text-sm text-neutral-600 dark:text-neutral-400">
-                Page {page} of {pagination.totalPages}
-              </span>
-              <Button
-                variant="outline"
-                onClick={() => setPage((p) => p + 1)}
-                disabled={page >= pagination.totalPages}
-              >
-                Next
-              </Button>
-            </div>
-          )}
         </CardContent>
       </Card>
     </div>
@@ -170,6 +151,7 @@ export default function AdminEventsPage() {
 }
 
 function DeleteEventButton({ eventId }: { eventId: string }) {
+  const t = useTranslations('admin.events');
   const deleteMutation = useDeleteEvent();
 
   const handleDelete = async () => {
@@ -184,25 +166,24 @@ function DeleteEventButton({ eventId }: { eventId: string }) {
     <AlertDialog>
       <AlertDialogTrigger asChild>
         <Button variant="destructive" size="sm">
-          Delete
+          {t('actions.delete')}
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Delete Event?</AlertDialogTitle>
+          <AlertDialogTitle>{t('deleteDialog.title')}</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete the event
-            and all registrations.
+            {t('deleteDialog.description')}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel>{t('deleteDialog.cancel')}</AlertDialogCancel>
           <AlertDialogAction
             onClick={handleDelete}
             className="bg-red-600 hover:bg-red-700"
             disabled={deleteMutation.isPending}
           >
-            {deleteMutation.isPending ? 'Deleting...' : 'Delete'}
+            {t('deleteDialog.confirm')}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

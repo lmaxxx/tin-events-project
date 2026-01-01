@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslations } from 'next-intl';
 import {
   useCategories,
   useCreateCategory,
@@ -35,6 +36,7 @@ interface Category {
 }
 
 export default function AdminCategoriesPage() {
+  const t = useTranslations('admin.categories');
   const { data: categories, isLoading } = useCategories();
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
   const [showAddForm, setShowAddForm] = useState(false);
@@ -42,7 +44,7 @@ export default function AdminCategoriesPage() {
   if (isLoading) {
     return (
       <div className="space-y-6">
-        <h1 className="text-3xl font-bold">Categories</h1>
+        <h1 className="text-3xl font-bold">{t('title')}</h1>
         <div className="h-96 animate-pulse bg-neutral-200 dark:bg-neutral-800 rounded-lg" />
       </div>
     );
@@ -51,16 +53,16 @@ export default function AdminCategoriesPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">Categories</h1>
+        <h1 className="text-3xl font-bold">{t('title')}</h1>
         <Button onClick={() => setShowAddForm(!showAddForm)}>
-          {showAddForm ? 'Cancel' : 'Add Category'}
+          {showAddForm ? t('actions.cancel') : t('actions.addCategory')}
         </Button>
       </div>
 
       {showAddForm && (
         <Card>
           <CardHeader>
-            <h2 className="text-xl font-semibold">Create New Category</h2>
+            <h2 className="text-xl font-semibold">{t('createNew')}</h2>
           </CardHeader>
           <CardContent>
             <CategoryForm onSuccess={() => setShowAddForm(false)} />
@@ -72,9 +74,9 @@ export default function AdminCategoriesPage() {
         <Card>
           <CardHeader>
             <div className="flex items-center justify-between">
-              <h2 className="text-xl font-semibold">Edit Category</h2>
+              <h2 className="text-xl font-semibold">{t('editCategory')}</h2>
               <Button variant="ghost" size="sm" onClick={() => setEditingCategory(null)}>
-                Cancel
+                {t('actions.cancel')}
               </Button>
             </div>
           </CardHeader>
@@ -89,17 +91,17 @@ export default function AdminCategoriesPage() {
 
       <Card>
         <CardHeader>
-          <h2 className="text-xl font-semibold">All Categories</h2>
+          <h2 className="text-xl font-semibold">{t('allCategories')}</h2>
         </CardHeader>
         <CardContent>
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
                 <tr className="border-b">
-                  <th className="text-left py-3 px-4 font-medium">Name</th>
-                  <th className="text-left py-3 px-4 font-medium">Description</th>
-                  <th className="text-left py-3 px-4 font-medium">Created</th>
-                  <th className="text-right py-3 px-4 font-medium">Actions</th>
+                  <th className="text-left py-3 px-4 font-medium">{t('tableHeaders.name')}</th>
+                  <th className="text-left py-3 px-4 font-medium">{t('tableHeaders.description')}</th>
+                  <th className="text-left py-3 px-4 font-medium">{t('tableHeaders.created')}</th>
+                  <th className="text-right py-3 px-4 font-medium">{t('tableHeaders.actions')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -108,7 +110,7 @@ export default function AdminCategoriesPage() {
                     <tr key={category.id} className="border-b last:border-0">
                       <td className="py-3 px-4 font-medium">{category.name}</td>
                       <td className="py-3 px-4 text-neutral-600 dark:text-neutral-400">
-                        {category.description || '—'}
+                        {category.description || t('emptyDescription')}
                       </td>
                       <td className="py-3 px-4 text-sm text-neutral-600 dark:text-neutral-400">
                         {new Date(category.createdAt).toLocaleDateString()}
@@ -120,7 +122,7 @@ export default function AdminCategoriesPage() {
                             size="sm"
                             onClick={() => setEditingCategory(category)}
                           >
-                            Edit
+                            {t('actions.edit')}
                           </Button>
                           <DeleteCategoryButton categoryId={category.id} />
                         </div>
@@ -130,7 +132,7 @@ export default function AdminCategoriesPage() {
                 ) : (
                   <tr>
                     <td colSpan={4} className="py-12 text-center text-neutral-600 dark:text-neutral-400">
-                      No categories found. Create your first category to get started.
+                      {t('empty')}
                     </td>
                   </tr>
                 )}
@@ -150,6 +152,7 @@ function CategoryForm({
   category?: Category;
   onSuccess: () => void;
 }) {
+  const t = useTranslations('admin.categories');
   const createMutation = useCreateCategory();
   const updateMutation = useUpdateCategory(category?.id || '');
 
@@ -183,10 +186,10 @@ function CategoryForm({
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <Field>
-        <FieldLabel htmlFor="name">Category Name</FieldLabel>
+        <FieldLabel htmlFor="name">{t('form.name')}</FieldLabel>
         <Input
           id="name"
-          placeholder="Enter category name"
+          placeholder={t('form.namePlaceholder')}
           {...register('name')}
           aria-invalid={!!errors.name}
         />
@@ -194,10 +197,10 @@ function CategoryForm({
       </Field>
 
       <Field>
-        <FieldLabel htmlFor="description">Description (optional)</FieldLabel>
+        <FieldLabel htmlFor="description">{t('form.description')}</FieldLabel>
         <Textarea
           id="description"
-          placeholder="Enter category description"
+          placeholder={t('form.descriptionPlaceholder')}
           rows={3}
           {...register('description')}
           aria-invalid={!!errors.description}
@@ -206,13 +209,14 @@ function CategoryForm({
       </Field>
 
       <Button type="submit" disabled={isLoading}>
-        {isLoading ? 'Saving...' : category ? 'Update Category' : 'Create Category'}
+        {category ? t('form.submitUpdate') : t('form.submitCreate')}
       </Button>
     </form>
   );
 }
 
 function DeleteCategoryButton({ categoryId }: { categoryId: string }) {
+  const t = useTranslations('admin.categories');
   const deleteMutation = useDeleteCategory();
 
   const handleDelete = async () => {
@@ -227,25 +231,24 @@ function DeleteCategoryButton({ categoryId }: { categoryId: string }) {
     <AlertDialog>
       <AlertDialogTrigger asChild>
         <Button variant="destructive" size="sm">
-          Delete
+          {t('actions.delete')}
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Delete Category?</AlertDialogTitle>
+          <AlertDialogTitle>{t('deleteDialog.title')}</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete the category.
-            Categories used by existing events cannot be deleted.
+            {t('deleteDialog.description')}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel>{t('deleteDialog.cancel')}</AlertDialogCancel>
           <AlertDialogAction
             onClick={handleDelete}
             className="bg-red-600 hover:bg-red-700"
             disabled={deleteMutation.isPending}
           >
-            {deleteMutation.isPending ? 'Deleting...' : 'Delete'}
+            {t('deleteDialog.confirm')}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

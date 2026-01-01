@@ -1,0 +1,132 @@
+{
+  "nav": {
+    "dashboard": "Панель",
+    "users": "Користувачі",
+    "events": "Події",
+    "categories": "Категорії",
+    "backToSite": "Назад на сайт"
+  },
+  "dashboard": {
+    "title": "Панель адміністратора",
+    "description": "Огляд та статистика адміністративної панелі",
+    "stats": {
+      "totalUsers": "Всього користувачів",
+      "registeredUsers": "Зареєстровані користувачі",
+      "manageUsers": "Керувати користувачами",
+      "totalEvents": "Всього подій",
+      "createdEvents": "Створені події",
+      "manageEvents": "Керувати подіями",
+      "categories": "Категорії",
+      "eventCategories": "Категорії подій",
+      "manageCategories": "Керувати категоріями"
+    },
+    "quickActions": {
+      "title": "Швидкі дії",
+      "userManagement": "Керування користувачами",
+      "userManagementDesc": "Перегляд та керування обліковими записами користувачів та ролями",
+      "eventModeration": "Модерація подій",
+      "eventModerationDesc": "Перегляд та модерація списків подій",
+      "categoryManagement": "Керування категоріями",
+      "categoryManagementDesc": "Додавання, редагування або видалення категорій подій",
+      "backToSite": "Назад на сайт",
+      "backToSiteDesc": "Повернутися на головну платформу подій"
+    }
+  },
+  "users": {
+    "title": "Користувачі",
+    "total": "Всього: {count} користувачів",
+    "tableHeaders": {
+      "name": "Ім'я",
+      "email": "Електронна пошта",
+      "roles": "Ролі",
+      "created": "Створено",
+      "actions": "Дії"
+    },
+    "actions": {
+      "editRoles": "Редагувати ролі",
+      "delete": "Видалити",
+      "save": "Зберегти",
+      "cancel": "Скасувати"
+    },
+    "roles": {
+      "guest": "гість",
+      "user": "користувач",
+      "organizer": "організатор",
+      "admin": "адміністратор"
+    },
+    "deleteDialog": {
+      "title": "Видалити користувача?",
+      "description": "Цю дію неможливо скасувати. Це назавжди видалить обліковий запис користувача та всі пов'язані дані.",
+      "cancel": "Скасувати",
+      "confirm": "Видалити"
+    },
+    "empty": "Користувачів не знайдено.",
+    "pagination": {
+      "previous": "Назад",
+      "next": "Далі",
+      "page": "Сторінка {current} з {total}"
+    }
+  },
+  "events": {
+    "title": "Події",
+    "allEvents": "Всі події",
+    "tableHeaders": {
+      "title": "Назва",
+      "category": "Категорія",
+      "creator": "Автор",
+      "date": "Дата",
+      "attendees": "Учасники",
+      "actions": "Дії"
+    },
+    "actions": {
+      "view": "Переглянути",
+      "delete": "Видалити"
+    },
+    "deleteDialog": {
+      "title": "Видалити подію?",
+      "description": "Цю дію неможливо скасувати. Це назавжди видалить подію та всі реєстрації.",
+      "cancel": "Скасувати",
+      "confirm": "Видалити"
+    },
+    "empty": "Події не знайдено.",
+    "pagination": {
+      "previous": "Назад",
+      "next": "Далі",
+      "page": "Сторінка {current} з {total}"
+    }
+  },
+  "categories": {
+    "title": "Категорії",
+    "allCategories": "Всі категорії",
+    "createNew": "Створити нову категорію",
+    "editCategory": "Редагувати категорію",
+    "tableHeaders": {
+      "name": "Назва",
+      "description": "Опис",
+      "created": "Створено",
+      "actions": "Дії"
+    },
+    "form": {
+      "name": "Назва категорії",
+      "namePlaceholder": "Введіть назву категорії",
+      "description": "Опис (необов'язково)",
+      "descriptionPlaceholder": "Введіть опис категорії",
+      "submitCreate": "Створити категорію",
+      "submitUpdate": "Оновити категорію"
+    },
+    "actions": {
+      "edit": "Редагувати",
+      "delete": "Видалити",
+      "cancel": "Скасувати",
+      "addCategory": "Додати категорію"
+    },
+    "deleteDialog": {
+      "title": "Видалити категорію?",
+      "description": "Цю дію неможливо скасувати. Це назавжди видалить категорію. Категорії, які використовуються існуючими подіями, не можна видалити.",
+      "cancel": "Скасувати",
+      "confirm": "Видалити"
+    },
+    "empty": "Категорій не знайдено. Створіть вашу першу категорію, щоб почати.",
+    "emptyDescription": "—"
+  }
+}

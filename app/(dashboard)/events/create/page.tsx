@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { useAuth } from '@/hooks/auth/useAuth';
 import { useCreateEvent } from '@/hooks/events/useEvents';
 import { EventForm } from '@/components/forms/EventForm';
@@ -9,6 +10,9 @@ import Link from 'next/link';
 import type { CreateEventInput } from '@/lib/validation/schemas';
 
 export default function CreateEventPage() {
+  const t = useTranslations('events.create');
+  const tAuth = useTranslations('auth');
+  const tCommon = useTranslations('common');
   const { data: authData } = useAuth();
   const createMutation = useCreateEvent();
 
@@ -20,12 +24,12 @@ export default function CreateEventPage() {
   if (!user) {
     return (
       <div className="max-w-2xl mx-auto py-12 text-center">
-        <h1 className="text-2xl font-bold mb-2">Authentication Required</h1>
+        <h1 className="text-2xl font-bold mb-2">{tAuth('authRequired')}</h1>
         <p className="text-neutral-600 dark:text-neutral-400 mb-4">
-          Please log in to create events.
+          {tAuth('pleaseLogin', { action: tAuth('actions.createEvents') })}
         </p>
         <Button asChild>
-          <Link href="/login">Go to Login</Link>
+          <Link href="/login">{tAuth('goToLogin')}</Link>
         </Button>
       </div>
     );
@@ -34,12 +38,12 @@ export default function CreateEventPage() {
   if (!canCreate) {
     return (
       <div className="max-w-2xl mx-auto py-12 text-center">
-        <h1 className="text-2xl font-bold mb-2">Insufficient Permissions</h1>
+        <h1 className="text-2xl font-bold mb-2">{tAuth('insufficientPermissions')}</h1>
         <p className="text-neutral-600 dark:text-neutral-400 mb-4">
-          You need organizer or admin privileges to create events.
+          {tAuth('needOrganizerPrivileges', { action: tAuth('actions.createEvents') })}
         </p>
         <Button asChild>
-          <Link href="/">Back to Events</Link>
+          <Link href="/">{tCommon('actions.backToEvents')}</Link>
         </Button>
       </div>
     );
@@ -58,23 +62,23 @@ export default function CreateEventPage() {
     <div className="max-w-2xl mx-auto space-y-6">
       <div className="flex items-center gap-4">
         <Button variant="ghost" asChild>
-          <Link href="/">← Back</Link>
+          <Link href="/">{t('back')}</Link>
         </Button>
-        <h1 className="text-3xl font-bold">Create New Event</h1>
+        <h1 className="text-3xl font-bold">{t('title')}</h1>
       </div>
 
       <Card>
         <CardHeader>
-          <h2 className="text-xl font-semibold">Event Details</h2>
+          <h2 className="text-xl font-semibold">{t('cardTitle')}</h2>
           <p className="text-sm text-neutral-600 dark:text-neutral-400">
-            Fill in the information below to create a new event.
+            {t('cardDescription')}
           </p>
         </CardHeader>
         <CardContent>
           <EventForm
             onSubmit={handleSubmit}
             isLoading={createMutation.isPending}
-            submitText="Create Event"
+            submitText={t('submitButton')}
           />
         </CardContent>
       </Card>

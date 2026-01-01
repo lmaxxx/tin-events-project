@@ -1,0 +1,132 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "users": "Users",
+    "events": "Events",
+    "categories": "Categories",
+    "backToSite": "Back to Site"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "description": "Admin panel overview and statistics",
+    "stats": {
+      "totalUsers": "Total Users",
+      "registeredUsers": "Registered users",
+      "manageUsers": "Manage Users",
+      "totalEvents": "Total Events",
+      "createdEvents": "Created events",
+      "manageEvents": "Manage Events",
+      "categories": "Categories",
+      "eventCategories": "Event categories",
+      "manageCategories": "Manage Categories"
+    },
+    "quickActions": {
+      "title": "Quick Actions",
+      "userManagement": "User Management",
+      "userManagementDesc": "View and manage user accounts and roles",
+      "eventModeration": "Event Moderation",
+      "eventModerationDesc": "Review and moderate event listings",
+      "categoryManagement": "Category Management",
+      "categoryManagementDesc": "Add, edit, or remove event categories",
+      "backToSite": "Back to Site",
+      "backToSiteDesc": "Return to the main event platform"
+    }
+  },
+  "users": {
+    "title": "Users",
+    "total": "Total: {count} users",
+    "tableHeaders": {
+      "name": "Name",
+      "email": "Email",
+      "roles": "Roles",
+      "created": "Created",
+      "actions": "Actions"
+    },
+    "actions": {
+      "editRoles": "Edit Roles",
+      "delete": "Delete",
+      "save": "Save",
+      "cancel": "Cancel"
+    },
+    "roles": {
+      "guest": "guest",
+      "user": "user",
+      "organizer": "organizer",
+      "admin": "admin"
+    },
+    "deleteDialog": {
+      "title": "Delete User?",
+      "description": "This action cannot be undone. This will permanently delete the user account and all associated data.",
+      "cancel": "Cancel",
+      "confirm": "Delete"
+    },
+    "empty": "No users found.",
+    "pagination": {
+      "previous": "Previous",
+      "next": "Next",
+      "page": "Page {current} of {total}"
+    }
+  },
+  "events": {
+    "title": "Events",
+    "allEvents": "All Events",
+    "tableHeaders": {
+      "title": "Title",
+      "category": "Category",
+      "creator": "Creator",
+      "date": "Date",
+      "attendees": "Attendees",
+      "actions": "Actions"
+    },
+    "actions": {
+      "view": "View",
+      "delete": "Delete"
+    },
+    "deleteDialog": {
+      "title": "Delete Event?",
+      "description": "This action cannot be undone. This will permanently delete the event and all registrations.",
+      "cancel": "Cancel",
+      "confirm": "Delete"
+    },
+    "empty": "No events found.",
+    "pagination": {
+      "previous": "Previous",
+      "next": "Next",
+      "page": "Page {current} of {total}"
+    }
+  },
+  "categories": {
+    "title": "Categories",
+    "allCategories": "All Categories",
+    "createNew": "Create New Category",
+    "editCategory": "Edit Category",
+    "tableHeaders": {
+      "name": "Name",
+      "description": "Description",
+      "created": "Created",
+      "actions": "Actions"
+    },
+    "form": {
+      "name": "Category Name",
+      "namePlaceholder": "Enter category name",
+      "description": "Description (optional)",
+      "descriptionPlaceholder": "Enter category description",
+      "submitCreate": "Create Category",
+      "submitUpdate": "Update Category"
+    },
+    "actions": {
+      "edit": "Edit",
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "addCategory": "Add Category"
+    },
+    "deleteDialog": {
+      "title": "Delete Category?",
+      "description": "This action cannot be undone. This will permanently delete the category. Categories used by existing events cannot be deleted.",
+      "cancel": "Cancel",
+      "confirm": "Delete"
+    },
+    "empty": "No categories found. Create your first category to get started.",
+    "emptyDescription": "—"
+  }
+}

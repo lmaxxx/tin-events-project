@@ -2,6 +2,7 @@
 
 import { use } from 'react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { useAuth } from '@/hooks/auth/useAuth';
 import { useEvent, useUpdateEvent } from '@/hooks/events/useEvents';
 import { EventForm } from '@/components/forms/EventForm';
@@ -11,6 +12,8 @@ import type { CreateEventInput } from '@/lib/validation/schemas';
 
 export default function EditEventPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
+  const t = useTranslations('events.edit');
+  const tCommon = useTranslations('common');
   const { data: authData } = useAuth();
   const { data: eventData, isLoading } = useEvent(id);
   const updateMutation = useUpdateEvent(id);
@@ -33,9 +36,9 @@ export default function EditEventPage({ params }: { params: Promise<{ id: string
   if (!event) {
     return (
       <div className="max-w-2xl mx-auto py-12 text-center">
-        <h1 className="text-2xl font-bold mb-2">Event not found</h1>
+        <h1 className="text-2xl font-bold mb-2">{t('notFound')}</h1>
         <Button asChild>
-          <Link href="/">Back to Events</Link>
+          <Link href="/">{tCommon('actions.backToEvents')}</Link>
         </Button>
       </div>
     );
@@ -44,12 +47,12 @@ export default function EditEventPage({ params }: { params: Promise<{ id: string
   if (!canManage) {
     return (
       <div className="max-w-2xl mx-auto py-12 text-center">
-        <h1 className="text-2xl font-bold mb-2">Insufficient Permissions</h1>
+        <h1 className="text-2xl font-bold mb-2">{t('insufficientPermissions')}</h1>
         <p className="text-neutral-600 dark:text-neutral-400 mb-4">
-          You can only edit events you created.
+          {t('onlyCreatorCanEdit')}
         </p>
         <Button asChild>
-          <Link href={`/events/${id}`}>Back to Event</Link>
+          <Link href={`/events/${id}`}>{t('backToEvent')}</Link>
         </Button>
       </div>
     );
@@ -74,16 +77,16 @@ export default function EditEventPage({ params }: { params: Promise<{ id: string
     <div className="max-w-2xl mx-auto space-y-6">
       <div className="flex items-center gap-4">
         <Button variant="ghost" asChild>
-          <Link href={`/events/${id}`}>← Back</Link>
+          <Link href={`/events/${id}`}>{t('back')}</Link>
         </Button>
-        <h1 className="text-3xl font-bold">Edit Event</h1>
+        <h1 className="text-3xl font-bold">{t('title')}</h1>
       </div>
 
       <Card>
         <CardHeader>
-          <h2 className="text-xl font-semibold">Event Details</h2>
+          <h2 className="text-xl font-semibold">{t('cardTitle')}</h2>
           <p className="text-sm text-neutral-600 dark:text-neutral-400">
-            Update the information below to modify your event.
+            {t('cardDescription')}
           </p>
         </CardHeader>
         <CardContent>
@@ -99,7 +102,7 @@ export default function EditEventPage({ params }: { params: Promise<{ id: string
             }}
             onSubmit={handleSubmit}
             isLoading={updateMutation.isPending}
-            submitText="Update Event"
+            submitText={t('submitButton')}
           />
         </CardContent>
       </Card>

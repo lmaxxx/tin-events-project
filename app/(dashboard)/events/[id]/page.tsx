@@ -2,6 +2,7 @@
 
 import { use } from 'react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { useAuth } from '@/hooks/auth/useAuth';
 import { useEvent, useRegisterForEvent, useUnregisterFromEvent, useDeleteEvent } from '@/hooks/events/useEvents';
 import { Button } from '@/components/ui/button';
@@ -21,6 +22,8 @@ import {
 
 export default function EventDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
+  const t = useTranslations('events.detail');
+  const tCommon = useTranslations('common');
   const { data: authData } = useAuth();
   const { data: eventData, isLoading } = useEvent(id);
   const registerMutation = useRegisterForEvent(id);
@@ -47,9 +50,9 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
   if (!event) {
     return (
       <div className="text-center py-12">
-        <h1 className="text-2xl font-bold mb-2">Event not found</h1>
+        <h1 className="text-2xl font-bold mb-2">{t('notFound')}</h1>
         <Button asChild>
-          <Link href="/">Back to Events</Link>
+          <Link href="/">{tCommon('actions.backToEvents')}</Link>
         </Button>
       </div>
     );
@@ -60,7 +63,7 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       <Button variant="ghost" asChild>
-        <Link href="/">← Back to Events</Link>
+        <Link href="/">{t('backToEvents')}</Link>
       </Button>
 
       <Card>
@@ -79,35 +82,34 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
               <h1 className="text-3xl font-bold">{event.title}</h1>
               <div className="flex items-center gap-2">
                 <Badge>{event.category.name}</Badge>
-                {isFull && <Badge variant="destructive">Full</Badge>}
+                {isFull && <Badge variant="destructive">{tCommon('status.full')}</Badge>}
               </div>
             </div>
             {canManage && (
               <div className="flex gap-2">
                 <Button variant="outline" size="sm" asChild>
-                  <Link href={`/events/${id}/edit`}>Edit</Link>
+                  <Link href={`/events/${id}/edit`}>{t('edit')}</Link>
                 </Button>
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <Button variant="destructive" size="sm">
-                      Delete
+                      {t('delete')}
                     </Button>
                   </AlertDialogTrigger>
                   <AlertDialogContent>
                     <AlertDialogHeader>
-                      <AlertDialogTitle>Delete Event?</AlertDialogTitle>
+                      <AlertDialogTitle>{t('deleteDialog.title')}</AlertDialogTitle>
                       <AlertDialogDescription>
-                        This action cannot be undone. This will permanently delete the event
-                        and all registrations.
+                        {t('deleteDialog.description')}
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogCancel>{t('deleteDialog.cancel')}</AlertDialogCancel>
                       <AlertDialogAction
                         onClick={() => deleteMutation.mutate(id)}
                         className="bg-red-600 hover:bg-red-700"
                       >
-                        Delete
+                        {t('deleteDialog.confirm')}
                       </AlertDialogAction>
                     </AlertDialogFooter>
                   </AlertDialogContent>
@@ -128,7 +130,7 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
                 <div>
-                  <p className="text-sm font-medium">Date & Time</p>
+                  <p className="text-sm font-medium">{tCommon('fields.dateTime')}</p>
                   <p className="text-sm text-neutral-600 dark:text-neutral-400">
                     {eventDate.toLocaleDateString('en-US', {
                       weekday: 'long',
@@ -152,7 +154,7 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
                 <div>
-                  <p className="text-sm font-medium">Location</p>
+                  <p className="text-sm font-medium">{tCommon('fields.location')}</p>
                   <p className="text-sm text-neutral-600 dark:text-neutral-400">{event.location}</p>
                 </div>
               </div>
@@ -162,7 +164,7 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
                 <div>
-                  <p className="text-sm font-medium">Organizer</p>
+                  <p className="text-sm font-medium">{tCommon('fields.organizer')}</p>
                   <p className="text-sm text-neutral-600 dark:text-neutral-400">{event.creator.name}</p>
                 </div>
               </div>
@@ -170,7 +172,7 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
 
             <div className="space-y-3">
               <div>
-                <p className="text-sm font-medium mb-2">Capacity</p>
+                <p className="text-sm font-medium mb-2">{tCommon('fields.capacity')}</p>
                 <div className="flex items-center gap-2">
                   <div className="flex-1 bg-neutral-200 dark:bg-neutral-800 rounded-full h-2">
                     <div
@@ -193,7 +195,7 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
                       onClick={() => unregisterMutation.mutate()}
                       disabled={unregisterMutation.isPending}
                     >
-                      {unregisterMutation.isPending ? 'Unregistering...' : 'Unregister'}
+                      {unregisterMutation.isPending ? t('unregistering') : t('unregister')}
                     </Button>
                   ) : (
                     <Button
@@ -201,14 +203,14 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
                       onClick={() => registerMutation.mutate()}
                       disabled={registerMutation.isPending || isFull}
                     >
-                      {registerMutation.isPending ? 'Registering...' : isFull ? 'Event Full' : 'Register for Event'}
+                      {registerMutation.isPending ? t('registering') : isFull ? t('eventFull') : t('register')}
                     </Button>
                   )}
                 </div>
               ) : (
                 <div className="pt-4">
                   <Button className="w-full" asChild>
-                    <Link href="/login">Login to Register</Link>
+                    <Link href="/login">{t('loginToRegister')}</Link>
                   </Button>
                 </div>
               )}

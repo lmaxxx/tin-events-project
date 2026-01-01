@@ -1,0 +1,82 @@
+{
+  "list": {
+    "title": "Discover Events",
+    "description": "Find and join amazing events in your area",
+    "noEvents": "No events found. Try changing your filters.",
+    "failedToLoad": "Failed to load events"
+  },
+  "detail": {
+    "backToEvents": "← Back to Events",
+    "notFound": "Event not found",
+    "edit": "Edit",
+    "delete": "Delete",
+    "register": "Register for Event",
+    "registering": "Registering...",
+    "unregister": "Unregister",
+    "unregistering": "Unregistering...",
+    "eventFull": "Event Full",
+    "loginToRegister": "Login to Register",
+    "deleteDialog": {
+      "title": "Delete Event?",
+      "description": "This action cannot be undone. This will permanently delete the event and all registrations.",
+      "cancel": "Cancel",
+      "confirm": "Delete"
+    },
+    "unregisterDialog": {
+      "title": "Unregister from Event?",
+      "description": "Are you sure you want to unregister from this event? You can register again later if spots are available.",
+      "cancel": "Cancel",
+      "confirm": "Unregister"
+    }
+  },
+  "create": {
+    "title": "Create New Event",
+    "cardTitle": "Event Details",
+    "cardDescription": "Fill in the information below to create a new event.",
+    "submitButton": "Create Event",
+    "back": "← Back"
+  },
+  "edit": {
+    "title": "Edit Event",
+    "cardTitle": "Event Details",
+    "cardDescription": "Update the information below to modify your event.",
+    "submitButton": "Update Event",
+    "back": "← Back",
+    "notFound": "Event not found",
+    "insufficientPermissions": "Insufficient Permissions",
+    "onlyCreatorCanEdit": "You can only edit events you created.",
+    "backToEvent": "Back to Event"
+  },
+  "myEvents": {
+    "title": "My Events",
+    "createButton": "Create Event",
+    "tabs": {
+      "created": "Created Events ({count})",
+      "registered": "Registered Events ({count})"
+    },
+    "emptyStates": {
+      "noCreated": "You haven't created any events yet.",
+      "createFirst": "Create Your First Event",
+      "noRegistered": "You haven't registered for any events yet.",
+      "browseEvents": "Browse Events"
+    }
+  },
+  "form": {
+    "title": "Event Title",
+    "titlePlaceholder": "Enter event title",
+    "description": "Description",
+    "descriptionPlaceholder": "Describe your event",
+    "dateTime": "Date & Time",
+    "capacity": "Capacity",
+    "capacityPlaceholder": "Maximum attendees",
+    "location": "Location",
+    "locationPlaceholder": "Event location or address",
+    "imageUrl": "Image URL (optional)",
+    "imageUrlPlaceholder": "https://example.com/image.jpg",
+    "category": "Category",
+    "categoryPlaceholder": "Select a category"
+  },
+  "filters": {
+    "allCategories": "All Categories"
+  }
+}

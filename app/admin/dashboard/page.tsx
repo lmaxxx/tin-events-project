@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { useUsers } from '@/hooks/users/useUsers';
 import { useEvents } from '@/hooks/events/useEvents';
 import { useCategories } from '@/hooks/categories/useCategories';
@@ -9,12 +10,13 @@ import { Button } from '@/components/ui/button';
 import { StatsCardSkeleton } from '@/components/ui/skeleton';
 
 export default function AdminDashboardPage() {
+  const t = useTranslations('admin.dashboard');
   const { data: usersData, isLoading: usersLoading } = useUsers(1, 1);
-  const { data: eventsData, isLoading: eventsLoading } = useEvents({ page: 1, pageSize: 1 });
+  const { data: eventsData, isLoading: eventsLoading } = useEvents();
   const { data: categories, isLoading: categoriesLoading } = useCategories();
 
   const totalUsers = usersData?.pagination?.total || 0;
-  const totalEvents = eventsData?.pagination?.total || 0;
+  const totalEvents = Array.isArray(eventsData) ? eventsData.length : 0;
   const totalCategories = categories?.length || 0;
 
   const isLoading = usersLoading || eventsLoading || categoriesLoading;
@@ -22,7 +24,7 @@ export default function AdminDashboardPage() {
   if (isLoading) {
     return (
       <div className="space-y-6">
-        <h1 className="text-3xl font-bold">Dashboard</h1>
+        <h1 className="text-3xl font-bold">{t('title')}</h1>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <StatsCardSkeleton />
           <StatsCardSkeleton />
@@ -35,60 +37,60 @@ export default function AdminDashboardPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold">Dashboard</h1>
+        <h1 className="text-3xl font-bold">{t('title')}</h1>
         <p className="text-neutral-600 dark:text-neutral-400 mt-1">
-          Admin panel overview and statistics
+          {t('description')}
         </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <StatsCard
-          title="Total Users"
+          title={t('stats.totalUsers')}
           value={totalUsers}
-          description="Registered users"
+          description={t('stats.registeredUsers')}
           href="/admin/users"
-          linkText="Manage Users"
+          linkText={t('stats.manageUsers')}
         />
         <StatsCard
-          title="Total Events"
+          title={t('stats.totalEvents')}
           value={totalEvents}
-          description="Created events"
+          description={t('stats.createdEvents')}
           href="/admin/events"
-          linkText="Manage Events"
+          linkText={t('stats.manageEvents')}
         />
         <StatsCard
-          title="Categories"
+          title={t('stats.categories')}
           value={totalCategories}
-          description="Event categories"
+          description={t('stats.eventCategories')}
           href="/admin/categories"
-          linkText="Manage Categories"
+          linkText={t('stats.manageCategories')}
         />
       </div>
 
       <Card>
         <CardHeader>
-          <h2 className="text-xl font-semibold">Quick Actions</h2>
+          <h2 className="text-xl font-semibold">{t('quickActions.title')}</h2>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <QuickActionCard
-              title="User Management"
-              description="View and manage user accounts and roles"
+              title={t('quickActions.userManagement')}
+              description={t('quickActions.userManagementDesc')}
               href="/admin/users"
             />
             <QuickActionCard
-              title="Event Moderation"
-              description="Review and moderate event listings"
+              title={t('quickActions.eventModeration')}
+              description={t('quickActions.eventModerationDesc')}
               href="/admin/events"
             />
             <QuickActionCard
-              title="Category Management"
-              description="Add, edit, or remove event categories"
+              title={t('quickActions.categoryManagement')}
+              description={t('quickActions.categoryManagementDesc')}
               href="/admin/categories"
             />
             <QuickActionCard
-              title="Back to Site"
-              description="Return to the main event platform"
+              title={t('quickActions.backToSite')}
+              description={t('quickActions.backToSiteDesc')}
               href="/"
             />
           </div>

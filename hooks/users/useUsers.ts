@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import { apiClient } from '@/lib/api/client';
 
@@ -48,6 +49,7 @@ export function useUser(id: string) {
 
 // Update user details (admin only)
 export function useUpdateUser(id: string) {
+  const t = useTranslations('errors.toast');
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -55,16 +57,17 @@ export function useUpdateUser(id: string) {
       apiClient.patch<{ user: User }>(`/api/users/${id}`, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['users'] });
-      toast.success('User updated successfully');
+      toast.success(t('userUpdated'));
     },
     onError: (error: any) => {
-      toast.error(error.message || 'Failed to update user');
+      toast.error(error.message || t('userUpdateFailed'));
     },
   });
 }
 
 // Update user roles (admin only)
 export function useUpdateUserRoles(id: string) {
+  const t = useTranslations('errors.toast');
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -72,26 +75,27 @@ export function useUpdateUserRoles(id: string) {
       apiClient.patch<{ user: User }>(`/api/users/${id}/roles`, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['users'] });
-      toast.success('User roles updated successfully');
+      toast.success(t('userRolesUpdated'));
     },
     onError: (error: any) => {
-      toast.error(error.message || 'Failed to update user roles');
+      toast.error(error.message || t('userRolesUpdateFailed'));
     },
   });
 }
 
 // Delete user (admin only)
 export function useDeleteUser() {
+  const t = useTranslations('errors.toast');
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (id: string) => apiClient.delete(`/api/users/${id}`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['users'] });
-      toast.success('User deleted successfully');
+      toast.success(t('userDeleted'));
     },
     onError: (error: any) => {
-      toast.error(error.message || 'Failed to delete user');
+      toast.error(error.message || t('userDeleteFailed'));
     },
   });
 }

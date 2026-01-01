@@ -66,9 +66,9 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
         <Link href="/">{t('backToEvents')}</Link>
       </Button>
 
-      <Card>
+      <Card className={"p-0 pb-4"}>
         {event.imageUrl && (
-          <div className="aspect-[2/1] overflow-hidden bg-neutral-100 dark:bg-neutral-800">
+          <div className="aspect-2/1 overflow-hidden bg-neutral-100 dark:bg-neutral-800">
             <img
               src={event.imageUrl}
               alt={event.title}

@@ -15,6 +15,7 @@ export default function RegisterPage() {
   const t = useTranslations();
   const tAuth = useTranslations('auth.register');
   const tFields = useTranslations('auth.fields');
+  const tCommon = useTranslations('common');
   const registerMutation = useRegister();
 
   const {
@@ -99,16 +100,29 @@ export default function RegisterPage() {
               {registerMutation.isPending ? tAuth('buttonLoading') : tAuth('button')}
             </Button>
 
-            <div className="text-center text-sm">
-              <span className="text-neutral-600 dark:text-neutral-400">
-                {tAuth('hasAccount')}{' '}
-              </span>
-              <Link
-                href="/login"
-                className="text-blue-600 hover:underline dark:text-blue-400"
-              >
-                {tAuth('loginLink')}
-              </Link>
+            <div className="text-center text-sm space-y-2">
+              <p>
+                <span className="text-neutral-600 dark:text-neutral-400">
+                  {tAuth('hasAccount')}{' '}
+                </span>
+                <Link
+                  href="/login"
+                  className="text-blue-600 hover:underline dark:text-blue-400"
+                >
+                  {tAuth('loginLink')}
+                </Link>
+              </p>
+              <p>
+                <span className="text-neutral-600 dark:text-neutral-400">
+                  {tAuth('orBrowseEvents')}{' '}
+                </span>
+                <Link
+                  href="/"
+                  className="text-blue-600 hover:underline dark:text-blue-400"
+                >
+                  {tCommon('nav.events')}
+                </Link>
+              </p>
             </div>
           </form>
         </CardContent>

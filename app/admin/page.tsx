@@ -66,36 +66,6 @@ export default function AdminDashboardPage() {
           linkText={t('stats.manageCategories')}
         />
       </div>
-
-      <Card>
-        <CardHeader>
-          <h2 className="text-xl font-semibold">{t('quickActions.title')}</h2>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <QuickActionCard
-              title={t('quickActions.userManagement')}
-              description={t('quickActions.userManagementDesc')}
-              href="/admin/users"
-            />
-            <QuickActionCard
-              title={t('quickActions.eventModeration')}
-              description={t('quickActions.eventModerationDesc')}
-              href="/admin/events"
-            />
-            <QuickActionCard
-              title={t('quickActions.categoryManagement')}
-              description={t('quickActions.categoryManagementDesc')}
-              href="/admin/categories"
-            />
-            <QuickActionCard
-              title={t('quickActions.backToSite')}
-              description={t('quickActions.backToSiteDesc')}
-              href="/"
-            />
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 }
@@ -128,26 +98,5 @@ function StatsCard({
         </Button>
       </CardContent>
     </Card>
-  );
-}
-
-function QuickActionCard({
-  title,
-  description,
-  href,
-}: {
-  title: string;
-  description: string;
-  href: string;
-}) {
-  return (
-    <Link href={href}>
-      <Card className="hover:shadow-md transition-shadow cursor-pointer h-full">
-        <CardContent className="pt-6">
-          <h3 className="font-semibold mb-1">{title}</h3>
-          <p className="text-sm text-neutral-600 dark:text-neutral-400">{description}</p>
-        </CardContent>
-      </Card>
-    </Link>
   );
 }

@@ -25,7 +25,7 @@ export function EventCard({ event }: EventCardProps) {
   const isFull = event.visitorCount >= event.capacity;
 
   return (
-    <Card className="overflow-hidden hover:shadow-lg transition-shadow">
+    <Card className="overflow-hidden p-0 pb-4 hover:shadow-lg transition-shadow">
       {event.imageUrl && (
         <div className="aspect-video overflow-hidden bg-neutral-100 dark:bg-neutral-800 relative">
           <Image

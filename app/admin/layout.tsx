@@ -4,10 +4,14 @@ import { useAuth } from '@/hooks/auth/useAuth';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import { LanguageSelector } from '@/components/layout/LanguageSelector';
+import { ThemeToggle } from '@/components/layout/ThemeToggle';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const { data: authData, isLoading } = useAuth();
   const pathname = usePathname();
+  const t = useTranslations('admin.nav');
 
   const user = authData?.user;
   const isAdmin = user?.roles.includes('admin');
@@ -39,7 +43,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   }
 
   const navItems = [
-    { href: '/admin/dashboard', label: 'Dashboard' },
+    { href: '/admin', label: 'Dashboard' },
     { href: '/admin/users', label: 'Users' },
     { href: '/admin/events', label: 'Events' },
     { href: '/admin/categories', label: 'Categories' },
@@ -70,9 +74,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 ))}
               </nav>
             </div>
-            <Button variant="ghost" size="sm" asChild>
-              <Link href="/">← Back to Site</Link>
-            </Button>
+            <div className="flex items-center gap-2">
+              <LanguageSelector />
+              <ThemeToggle />
+              <Button variant="ghost" size="sm" asChild>
+                <Link href="/">{t('backToSite')}</Link>
+              </Button>
+            </div>
           </div>
         </div>
       </div>

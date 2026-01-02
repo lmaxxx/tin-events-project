@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db, events, users, eventCategories, eventVisitors } from '@/db';
-import { eq, desc, count } from 'drizzle-orm';
+import { eq, desc, count, like, or, and, gte, lte } from 'drizzle-orm';
 import { withAuth } from '@/lib/auth/middleware';
 import { eventSchema } from '@/lib/validation/schemas';
 import { canCreateEvent } from '@/lib/auth/permissions';
@@ -14,8 +14,41 @@ export async function GET(req: NextRequest) {
     const page = parseInt(searchParams.get('page') || '1');
     const pageSize = parseInt(searchParams.get('pageSize') || '10');
     const categoryId = searchParams.get('categoryId');
+    const search = searchParams.get('search');
+    const date = searchParams.get('date'); // format: 'YYYY-MM-DD'
 
     const offset = (page - 1) * pageSize;
+
+    // Build filter conditions
+    const conditions = [];
+
+    if (categoryId) {
+      conditions.push(eq(events.categoryId, categoryId));
+    }
+
+    if (search) {
+      conditions.push(
+        or(
+          like(events.title, `%${search}%`),
+          like(events.description, `%${search}%`)
+        )!
+      );
+    }
+
+    if (date) {
+      // Filter by date (ignoring time)
+      const startOfDay = new Date(date);
+      startOfDay.setHours(0, 0, 0, 0);
+      const endOfDay = new Date(date);
+      endOfDay.setHours(23, 59, 59, 999);
+
+      conditions.push(
+        and(
+          gte(events.date, startOfDay),
+          lte(events.date, endOfDay)
+        )!
+      );
+    }
 
     // Build query
     let query = db
@@ -47,9 +80,9 @@ export async function GET(req: NextRequest) {
       .limit(pageSize)
       .offset(offset);
 
-    // Filter by category if provided
-    if (categoryId) {
-      query = query.where(eq(events.categoryId, categoryId)) as any;
+    // Apply all conditions
+    if (conditions.length > 0) {
+      query = query.where(and(...conditions)) as any;
     }
 
     const eventsList = await query;
@@ -71,8 +104,8 @@ export async function GET(req: NextRequest) {
 
     // Get total count for pagination
     let countQuery = db.select({ count: count() }).from(events);
-    if (categoryId) {
-      countQuery = countQuery.where(eq(events.categoryId, categoryId)) as any;
+    if (conditions.length > 0) {
+      countQuery = countQuery.where(and(...conditions)) as any;
     }
     const [totalResult] = await countQuery;
     const total = totalResult?.count || 0;

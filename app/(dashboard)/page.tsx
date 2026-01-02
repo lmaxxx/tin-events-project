@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useEvents } from '@/hooks/events/useEvents';
+import { useDebounce } from '@/hooks/useDebounce';
 import { EventCard } from '@/components/events/EventCard';
 import { EventFilters } from '@/components/events/EventFilters';
 import { Button } from '@/components/ui/button';
@@ -11,13 +12,19 @@ import { EventCardSkeleton } from '@/components/ui/skeleton';
 export default function HomePage() {
   const t = useTranslations('events.list');
   const [selectedCategory, setSelectedCategory] = useState<string | undefined>();
+  const [searchQuery, setSearchQuery] = useState('');
+  const [dateFilter, setDateFilter] = useState<Date | undefined>();
   const [page, setPage] = useState(1);
   const pageSize = 12;
+
+  const debouncedSearch = useDebounce(searchQuery, 300);
 
   const { data, isLoading, error } = useEvents({
     page,
     pageSize,
     categoryId: selectedCategory,
+    search: debouncedSearch,
+    date: dateFilter,
   });
 
   if (error) {
@@ -42,6 +49,10 @@ export default function HomePage() {
       <EventFilters
         selectedCategory={selectedCategory}
         onCategoryChange={setSelectedCategory}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        dateFilter={dateFilter}
+        onDateChange={setDateFilter}
       />
 
       {isLoading ? (

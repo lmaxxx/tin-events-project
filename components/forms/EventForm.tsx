@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { DateTimePicker } from '@/components/ui/date-time-picker';
 import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 
 interface EventFormProps {
@@ -73,11 +74,11 @@ export function EventForm({ defaultValues, onSubmit, isLoading, submitText = 'Cr
       <div className="grid md:grid-cols-2 gap-6">
         <Field>
           <FieldLabel htmlFor="date">Date & Time</FieldLabel>
-          <Input
-            id="date"
-            type="datetime-local"
-            {...register('date')}
-            aria-invalid={!!errors.date}
+          <DateTimePicker
+            value={date}
+            onChange={(value) => setValue('date', value, { shouldValidate: true })}
+            minDate={new Date()}
+            error={errors.date?.message}
           />
           <FieldError errors={[errors.date]} />
         </Field>

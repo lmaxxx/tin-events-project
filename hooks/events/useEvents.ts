@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
+import { format } from 'date-fns';
 import { apiClient } from '@/lib/api/client';
 import type { CreateEventInput, UpdateEventInput } from '@/lib/validation/schemas';
 
@@ -37,6 +38,8 @@ interface EventsFilters {
   page?: number;
   pageSize?: number;
   categoryId?: string;
+  search?: string;
+  date?: Date;
 }
 
 // Get paginated events list
@@ -45,11 +48,14 @@ export function useEvents(filters?: EventsFilters) {
   if (filters?.page) params.set('page', filters.page.toString());
   if (filters?.pageSize) params.set('pageSize', filters.pageSize.toString());
   if (filters?.categoryId) params.set('categoryId', filters.categoryId);
+  if (filters?.search) params.set('search', filters.search);
+  if (filters?.date) params.set('date', format(filters.date, 'yyyy-MM-dd'));
 
   return useQuery({
     queryKey: ['events', filters],
     queryFn: () =>
       apiClient.get<Event[]>(`/api/events?${params.toString()}`),
+    staleTime: 30000,
   });
 }
 
@@ -236,17 +242,29 @@ export function useUnregisterFromEvent(eventId: string) {
 }
 
 // Get user's created events
-export function useMyEvents() {
+export function useMyEvents(filters?: { search?: string; date?: Date; categoryId?: string }) {
+  const params = new URLSearchParams();
+  if (filters?.search) params.set('search', filters.search);
+  if (filters?.date) params.set('date', format(filters.date, 'yyyy-MM-dd'));
+  if (filters?.categoryId) params.set('categoryId', filters.categoryId);
+
   return useQuery({
-    queryKey: ['my-events'],
-    queryFn: () => apiClient.get<{ events: Event[] }>('/api/my/events'),
+    queryKey: ['my-events', filters],
+    queryFn: () => apiClient.get<{ events: Event[] }>(`/api/my/events?${params.toString()}`),
+    staleTime: 30000,
   });
 }
 
 // Get user's event registrations
-export function useMyRegistrations() {
+export function useMyRegistrations(filters?: { search?: string; date?: Date; categoryId?: string }) {
+  const params = new URLSearchParams();
+  if (filters?.search) params.set('search', filters.search);
+  if (filters?.date) params.set('date', format(filters.date, 'yyyy-MM-dd'));
+  if (filters?.categoryId) params.set('categoryId', filters.categoryId);
+
   return useQuery({
-    queryKey: ['my-registrations'],
-    queryFn: () => apiClient.get<{ events: Event[] }>('/api/my/registrations'),
+    queryKey: ['my-registrations', filters],
+    queryFn: () => apiClient.get<{ events: Event[] }>(`/api/my/registrations?${params.toString()}`),
+    staleTime: 30000,
   });
 }

@@ -1,0 +1,12 @@
+{
+  "search": {
+    "placeholder": "Search by title or description...",
+    "clear": "Clear search"
+  },
+  "date": {
+    "placeholder": "Select date",
+    "clear": "Clear date filter"
+  },
+  "clearAll": "Clear all filters",
+  "noResults": "No events found matching your filters"
+}

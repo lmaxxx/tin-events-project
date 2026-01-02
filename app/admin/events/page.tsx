@@ -1,14 +1,14 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { useEvents, useDeleteEvent } from '@/hooks/events/useEvents';
-import { useCategories } from '@/hooks/categories/useCategories';
+import { useDebounce } from '@/hooks/useDebounce';
+import { EventFilters } from '@/components/events/EventFilters';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { TableSkeleton } from '@/components/ui/skeleton';
 import {
   AlertDialog,
@@ -27,14 +27,24 @@ export default function AdminEventsPage() {
   const tCommon = useTranslations('common');
   const [page, setPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState<string | undefined>();
+  const [searchQuery, setSearchQuery] = useState('');
+  const [dateFilter, setDateFilter] = useState<Date | undefined>();
   const pageSize = 20;
+
+  const debouncedSearch = useDebounce(searchQuery, 300);
 
   const { data: eventsData, isLoading } = useEvents({
     page,
     pageSize,
     categoryId: selectedCategory,
+    search: debouncedSearch,
+    date: dateFilter,
   });
-  const { data: categories } = useCategories();
+
+  // Reset page when filters change
+  useEffect(() => {
+    setPage(1);
+  }, [debouncedSearch, dateFilter, selectedCategory]);
 
   const events = Array.isArray(eventsData) ? eventsData : [];
   const pagination = undefined; // Pagination not available in current implementation
@@ -57,30 +67,16 @@ export default function AdminEventsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">{t('title')}</h1>
-        <div className="flex items-center gap-4">
-          <Select
-            value={selectedCategory || 'all'}
-            onValueChange={(value) => {
-              setSelectedCategory(value === 'all' ? undefined : value);
-              setPage(1);
-            }}
-          >
-            <SelectTrigger className="w-[200px]">
-              <SelectValue placeholder={t('allEvents')} />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">{t('allEvents')}</SelectItem>
-              {categories?.map((category) => (
-                <SelectItem key={category.id} value={category.id}>
-                  {category.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
+      <h1 className="text-3xl font-bold">{t('title')}</h1>
+
+      <EventFilters
+        selectedCategory={selectedCategory}
+        onCategoryChange={setSelectedCategory}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        dateFilter={dateFilter}
+        onDateChange={setDateFilter}
+      />
 
       <Card>
         <CardHeader>

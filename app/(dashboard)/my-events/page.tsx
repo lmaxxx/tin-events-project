@@ -5,7 +5,9 @@ import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { useAuth } from '@/hooks/auth/useAuth';
 import { useMyEvents, useMyRegistrations, useUnregisterFromEvent } from '@/hooks/events/useEvents';
+import { useDebounce } from '@/hooks/useDebounce';
 import { EventCard } from '@/components/events/EventCard';
+import { EventFilters } from '@/components/events/EventFilters';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import {
@@ -27,8 +29,21 @@ export default function MyEventsPage() {
   const tAuth = useTranslations('auth');
   const tCommon = useTranslations('common');
   const { data: authData } = useAuth();
-  const { data: myEventsData, isLoading: myEventsLoading } = useMyEvents();
-  const { data: myRegistrationsData, isLoading: myRegistrationsLoading } = useMyRegistrations();
+
+  // Shared filter state for both tabs
+  const [selectedCategory, setSelectedCategory] = useState<string | undefined>();
+  const [searchQuery, setSearchQuery] = useState('');
+  const [dateFilter, setDateFilter] = useState<Date | undefined>();
+  const debouncedSearch = useDebounce(searchQuery, 300);
+
+  const filters = {
+    search: debouncedSearch,
+    date: dateFilter,
+    categoryId: selectedCategory,
+  };
+
+  const { data: myEventsData, isLoading: myEventsLoading } = useMyEvents(filters);
+  const { data: myRegistrationsData, isLoading: myRegistrationsLoading } = useMyRegistrations(filters);
 
   const user = authData?.user;
   const isOrganizer = user?.roles.includes('organizer') || user?.roles.includes('admin');
@@ -63,6 +78,15 @@ export default function MyEventsPage() {
           </Button>
         )}
       </div>
+
+      <EventFilters
+        selectedCategory={selectedCategory}
+        onCategoryChange={setSelectedCategory}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        dateFilter={dateFilter}
+        onDateChange={setDateFilter}
+      />
 
       {/* Tab Navigation */}
       <div className="flex gap-2 border-b">

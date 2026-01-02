@@ -12,24 +12,6 @@ export function createPasswordSchema(t: (key: string, values?: any) => string) {
     .regex(/[^a-zA-Z0-9]/, t('validation.password.special'));
 }
 
-// Safe URL schema factory
-export function createSafeUrlSchema(t: (key: string, values?: any) => string) {
-  return z
-    .string()
-    .url(t('validation.event.imageUrl.invalid'))
-    .refine(
-      (url) => {
-        try {
-          const parsed = new URL(url);
-          return parsed.protocol === 'https:' || parsed.protocol === 'http:';
-        } catch {
-          return false;
-        }
-      },
-      { message: t('validation.event.imageUrl.protocol') }
-    );
-}
-
 // Register schema factory
 export function createRegisterSchema(t: (key: string, values?: any) => string) {
   return z.object({
@@ -61,8 +43,15 @@ export function createEventSchema(t: (key: string, values?: any) => string) {
       .string()
       .min(10, t('validation.event.description.minLength', { min: 10 }))
       .max(5000, t('validation.event.description.maxLength', { max: 5000 })),
-    date: z.string().datetime(t('validation.event.date.invalid')),
-    imageUrl: createSafeUrlSchema(t).optional().or(z.literal('')),
+    date: z.iso
+      .datetime({local: true})
+      .refine(
+        (value) => {
+          const date = new Date(value);
+          return date.getTime() > Date.now();
+        },
+        { message: "Datetime must be in the future" }),
+    imageUrl: z.httpUrl().optional().or(z.literal('')),
     capacity: z
       .number()
       .int(t('validation.event.capacity.integer'))

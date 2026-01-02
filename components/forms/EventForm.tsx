@@ -40,6 +40,10 @@ export function EventForm({ defaultValues, onSubmit, isLoading, submitText = 'Cr
   });
 
   const selectedCategory = watch('categoryId');
+  const date = watch('date');
+
+  console.log(date)
+  console.log(typeof date)
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">

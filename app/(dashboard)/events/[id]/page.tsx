@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { useAuth } from '@/hooks/auth/useAuth';
 import { useEvent, useRegisterForEvent, useUnregisterFromEvent, useDeleteEvent } from '@/hooks/events/useEvents';
+import { ParticipantList } from '@/components/events/ParticipantList';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -216,6 +217,17 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
               )}
             </div>
           </div>
+
+          {/* Participant Management - Only show to organizers/admins */}
+          {canManage && (
+            <div className="border-t pt-6 mt-6">
+              <ParticipantList
+                eventId={id}
+                participants={event.visitors || []}
+                canManage={canManage}
+              />
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>

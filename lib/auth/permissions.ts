@@ -23,6 +23,20 @@ export function canManageEvent(user: UserWithRoles, event: Event): boolean {
   return false;
 }
 
+export function canManageEventParticipants(user: UserWithRoles, event: Event): boolean {
+  // Admin can manage participants for any event
+  if (hasRole(user.roles, 'admin')) {
+    return true;
+  }
+
+  // Event creator (organizer) can manage their own event's participants
+  if (event.creatorId === user.id) {
+    return true;
+  }
+
+  return false;
+}
+
 export function canAccessAdminPanel(user: UserWithRoles): boolean {
   return hasRole(user.roles, 'admin');
 }

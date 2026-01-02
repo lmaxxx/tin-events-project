@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db, events, users, eventCategories, eventVisitors } from '@/db';
-import { eq, desc, count, sql } from 'drizzle-orm';
+import { eq, desc, count } from 'drizzle-orm';
 import { withAuth } from '@/lib/auth/middleware';
 import { eventSchema } from '@/lib/validation/schemas';
 import { canCreateEvent } from '@/lib/auth/permissions';

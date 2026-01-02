@@ -27,6 +27,34 @@
       "description": "Are you sure you want to unregister from this event? You can register again later if spots are available.",
       "cancel": "Cancel",
       "confirm": "Unregister"
+    },
+    "participants": {
+      "title": "Participants",
+      "noParticipants": "No participants yet",
+      "remove": "Remove",
+      "addParticipant": "Add Participant",
+      "removeSuccess": "Participant removed successfully",
+      "removeFailed": "Failed to remove participant",
+      "addSuccess": "Participant added successfully",
+      "addFailed": "Failed to add participant",
+      "removeDialog": {
+        "title": "Remove Participant",
+        "description": "Are you sure you want to remove {name} from this event?",
+        "confirm": "Remove",
+        "cancel": "Cancel"
+      },
+      "addDialog": {
+        "title": "Add Participant",
+        "description": "Search for a user to add as a participant to this event.",
+        "searchLabel": "Search by name or email",
+        "searchPlaceholder": "Type to search...",
+        "noUsersAvailable": "No users available to add",
+        "noResults": "No users found matching your search",
+        "loading": "Searching...",
+        "confirm": "Add",
+        "cancel": "Cancel",
+        "adding": "Adding..."
+      }
     }
   },
   "create": {

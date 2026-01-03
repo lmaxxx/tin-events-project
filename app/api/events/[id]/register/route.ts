@@ -54,12 +54,13 @@ export const POST = withAuth(
       // Check event capacity and register atomically to prevent race conditions
       db.transaction((tx) => {
         // Count current visitors within transaction
-        const [visitorCountResult] = tx
+        const visitorCountResult = tx
           .select({ count: count() })
           .from(eventVisitors)
-          .where(eq(eventVisitors.eventId, id));
+          .where(eq(eventVisitors.eventId, id))
+          .all();
 
-        const currentVisitors = visitorCountResult?.count || 0;
+        const currentVisitors = visitorCountResult[0]?.count || 0;
 
         // Check capacity
         if (currentVisitors >= event.capacity) {
@@ -70,7 +71,7 @@ export const POST = withAuth(
         tx.insert(eventVisitors).values({
           eventId: id,
           userId: user.id,
-        });
+        }).run();
       });
 
       return NextResponse.json<ApiResponse>(

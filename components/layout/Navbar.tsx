@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useAuth, useLogout } from '@/hooks/auth/useAuth';
 import { useTheme } from '@/hooks/useTheme';
 import { useTranslations } from 'next-intl';
@@ -17,6 +18,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 export function Navbar() {
+  const pathname = usePathname();
   const { data: authData, isLoading } = useAuth();
   const logout = useLogout();
   const { theme, toggleTheme } = useTheme();
@@ -39,14 +41,22 @@ export function Navbar() {
           <div className="hidden md:flex items-center gap-4">
             <Link
               href="/"
-              className="text-sm text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100"
+              className={`text-sm transition-colors ${
+                pathname === '/'
+                  ? 'text-blue-600 dark:text-blue-400 font-medium'
+                  : 'text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100'
+              }`}
             >
               {t('nav.events')}
             </Link>
             {user && (
               <Link
                 href="/my-events"
-                className="text-sm text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100"
+                className={`text-sm transition-colors ${
+                  pathname === '/my-events'
+                    ? 'text-blue-600 dark:text-blue-400 font-medium'
+                    : 'text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100'
+                }`}
               >
                 {t('nav.myEvents')}
               </Link>
@@ -54,7 +64,11 @@ export function Navbar() {
             {isAdmin && (
               <Link
                 href="/admin"
-                className="text-sm text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100"
+                className={`text-sm transition-colors ${
+                  pathname.startsWith('/admin')
+                    ? 'text-blue-600 dark:text-blue-400 font-medium'
+                    : 'text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100'
+                }`}
               >
                 {t('nav.admin')}
               </Link>
@@ -145,14 +159,22 @@ export function Navbar() {
           <div className="container mx-auto px-4 py-4 space-y-2">
             <Link
               href="/"
-              className="block py-2 text-sm text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100"
+              className={`block py-2 text-sm transition-colors ${
+                pathname === '/'
+                  ? 'text-blue-600 dark:text-blue-400 font-medium'
+                  : 'text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100'
+              }`}
               onClick={() => setMobileMenuOpen(false)}
             >
               {t('nav.events')}
             </Link>
             <Link
               href="/my-events"
-              className="block py-2 text-sm text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100"
+              className={`block py-2 text-sm transition-colors ${
+                pathname === '/my-events'
+                  ? 'text-blue-600 dark:text-blue-400 font-medium'
+                  : 'text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100'
+              }`}
               onClick={() => setMobileMenuOpen(false)}
             >
               {t('nav.myEvents')}
@@ -160,7 +182,11 @@ export function Navbar() {
             {isAdmin && (
               <Link
                 href="/admin"
-                className="block py-2 text-sm text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100"
+                className={`block py-2 text-sm transition-colors ${
+                  pathname.startsWith('/admin')
+                    ? 'text-blue-600 dark:text-blue-400 font-medium'
+                    : 'text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100'
+                }`}
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {t('nav.admin')}

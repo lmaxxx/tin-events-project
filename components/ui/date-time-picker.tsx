@@ -54,9 +54,15 @@ export function DateTimePicker({ value, onChange, minDate, error }: DateTimePick
     if (date) {
       const combined = new Date(date);
       combined.setHours(parseInt(hours), parseInt(minutes));
-      onChange(combined.toISOString());
+      const newValue = combined.toISOString();
+
+      // Only call onChange if the value has actually changed
+      if (newValue !== value) {
+        onChange(newValue);
+      }
     }
-  }, [date, hours, minutes, onChange]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [date, hours, minutes]);
 
   const handleDateSelect = (newDate: Date | undefined) => {
     setDate(newDate);

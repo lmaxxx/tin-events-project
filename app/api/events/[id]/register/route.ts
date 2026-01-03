@@ -52,9 +52,9 @@ export const POST = withAuth(
       }
 
       // Check event capacity and register atomically to prevent race conditions
-      await db.transaction(async (tx) => {
+      db.transaction((tx) => {
         // Count current visitors within transaction
-        const [visitorCountResult] = await tx
+        const [visitorCountResult] = tx
           .select({ count: count() })
           .from(eventVisitors)
           .where(eq(eventVisitors.eventId, id));
@@ -67,7 +67,7 @@ export const POST = withAuth(
         }
 
         // Register user for event (atomically)
-        await tx.insert(eventVisitors).values({
+        tx.insert(eventVisitors).values({
           eventId: id,
           userId: user.id,
         });

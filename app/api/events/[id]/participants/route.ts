@@ -53,7 +53,13 @@ export const POST = withAuth(
         throw new ForbiddenError('You do not have permission to manage participants for this event');
       }
 
-      // 4. Verify target user exists
+      // 4. Check if event has already passed
+      const eventDate = new Date(event.date);
+      if (eventDate < new Date()) {
+        throw new ForbiddenError('Cannot add participants to past events');
+      }
+
+      // 5. Verify target user exists
       const [targetUser] = await db
         .select()
         .from(users)
@@ -64,7 +70,7 @@ export const POST = withAuth(
         throw new NotFoundError('User not found');
       }
 
-      // 5. Check if already registered
+      // 6. Check if already registered
       const [existingRegistration] = await db
         .select()
         .from(eventVisitors)
@@ -80,10 +86,10 @@ export const POST = withAuth(
         throw new ConflictError('User is already registered for this event');
       }
 
-      // 6. Check event capacity and add participant atomically to prevent race conditions
-      await db.transaction(async (tx) => {
+      // 7. Check event capacity and add participant atomically to prevent race conditions
+      db.transaction((tx) => {
         // Count current visitors within transaction
-        const [visitorCountResult] = await tx
+        const [visitorCountResult] = tx
           .select({ count: count() })
           .from(eventVisitors)
           .where(eq(eventVisitors.eventId, id));
@@ -95,8 +101,8 @@ export const POST = withAuth(
           throw new ConflictError('Event is at full capacity');
         }
 
-        // 7. Add participant (atomically)
-        await tx.insert(eventVisitors).values({
+        // 8. Add participant (atomically)
+        tx.insert(eventVisitors).values({
           eventId: id,
           userId,
         });

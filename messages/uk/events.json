@@ -105,6 +105,13 @@
     "categoryPlaceholder": "Виберіть категорію"
   },
   "filters": {
-    "allCategories": "Всі категорії"
+    "allCategories": "Всі категорії",
+    "search": {
+      "placeholder": "Пошук подій..."
+    },
+    "date": {
+      "placeholder": "Фільтр за датою"
+    },
+    "clearAll": "Очистити всі фільтри"
   }
 }

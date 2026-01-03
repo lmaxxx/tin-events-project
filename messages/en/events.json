@@ -105,6 +105,13 @@
     "categoryPlaceholder": "Select a category"
   },
   "filters": {
-    "allCategories": "All Categories"
+    "allCategories": "All Categories",
+    "search": {
+      "placeholder": "Search events..."
+    },
+    "date": {
+      "placeholder": "Filter by date"
+    },
+    "clearAll": "Clear all filters"
   }
 }

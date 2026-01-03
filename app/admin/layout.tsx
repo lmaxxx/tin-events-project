@@ -12,6 +12,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const { data: authData, isLoading } = useAuth();
   const pathname = usePathname();
   const t = useTranslations('admin.nav');
+  const tAccessDenied = useTranslations('admin.accessDenied');
 
   const user = authData?.user;
   const isAdmin = user?.roles.includes('admin');
@@ -30,12 +31,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     return (
       <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold mb-2">Access Denied</h1>
+          <h1 className="text-2xl font-bold mb-2">{tAccessDenied('title')}</h1>
           <p className="text-neutral-600 dark:text-neutral-400 mb-4">
-            You need administrator privileges to access this area.
+            {tAccessDenied('description')}
           </p>
           <Button asChild>
-            <Link href="/">Back to Home</Link>
+            <Link href="/">{tAccessDenied('backToHome')}</Link>
           </Button>
         </div>
       </div>
@@ -43,10 +44,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   }
 
   const navItems = [
-    { href: '/admin', label: 'Dashboard' },
-    { href: '/admin/users', label: 'Users' },
-    { href: '/admin/events', label: 'Events' },
-    { href: '/admin/categories', label: 'Categories' },
+    { href: '/admin', label: t('dashboard') },
+    { href: '/admin/users', label: t('users') },
+    { href: '/admin/events', label: t('events') },
+    { href: '/admin/categories', label: t('categories') },
   ];
 
   return (
@@ -56,7 +57,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-6">
               <Link href="/" className="text-xl font-bold">
-                Admin Panel
+                {t('title')}
               </Link>
               <nav className="hidden md:flex items-center gap-4">
                 {navItems.map((item) => (

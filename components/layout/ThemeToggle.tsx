@@ -2,8 +2,10 @@
 
 import { Button } from '@/components/ui/button';
 import { useTheme } from '@/hooks/useTheme';
+import { useTranslations } from 'next-intl';
 
 export function ThemeToggle() {
+  const t = useTranslations('common.theme');
   const { theme, toggleTheme } = useTheme();
 
   return (
@@ -12,7 +14,7 @@ export function ThemeToggle() {
       size="sm"
       onClick={toggleTheme}
       className="hidden sm:flex"
-      aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+      aria-label={theme === 'dark' ? t('light') : t('dark')}
     >
       {theme === 'dark' ? (
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

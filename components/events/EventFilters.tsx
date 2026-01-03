@@ -25,7 +25,7 @@ export function EventFilters({
   onDateChange,
 }: EventFiltersProps) {
   const { data: categories, isLoading } = useCategories();
-  const t = useTranslations('filters');
+  const t = useTranslations('events.filters');
 
   const hasActiveFilters = selectedCategory || searchQuery || dateFilter;
 
@@ -58,10 +58,10 @@ export function EventFilters({
         onValueChange={(value) => onCategoryChange(value === 'all' ? undefined : value)}
       >
         <SelectTrigger className="w-full md:w-[200px]">
-          <SelectValue placeholder="All Categories" />
+          <SelectValue placeholder={t('allCategories')} />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="all">All Categories</SelectItem>
+          <SelectItem value="all">{t('allCategories')}</SelectItem>
           {categories?.map((category) => (
             <SelectItem key={category.id} value={category.id}>
               {category.name}

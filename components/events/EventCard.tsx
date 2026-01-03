@@ -1,8 +1,12 @@
+'use client';
+
 import Link from 'next/link';
 import Image from 'next/image';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { useTranslations } from 'next-intl';
+import { useLocale } from '@/hooks/useLocale';
 
 interface EventCardProps {
   event: {
@@ -21,6 +25,8 @@ interface EventCardProps {
 }
 
 export function EventCard({ event }: EventCardProps) {
+  const t = useTranslations('common');
+  const { locale } = useLocale();
   const eventDate = new Date(event.date);
   const isFull = event.visitorCount >= event.capacity;
 
@@ -65,7 +71,7 @@ export function EventCard({ event }: EventCardProps) {
                 d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
               />
             </svg>
-            <span>{eventDate.toLocaleDateString('en-US', {
+            <span>{eventDate.toLocaleDateString(locale, {
               weekday: 'short',
               year: 'numeric',
               month: 'short',
@@ -111,13 +117,13 @@ export function EventCard({ event }: EventCardProps) {
               />
             </svg>
             <span>
-              {event.visitorCount}/{event.capacity} attendees
-              {isFull && <span className="ml-1 text-red-600 dark:text-red-400">(Full)</span>}
+              {event.visitorCount}/{event.capacity} {t('misc.attendees', { count: event.visitorCount })}
+              {isFull && <span className="ml-1 text-red-600 dark:text-red-400">({t('status.full')})</span>}
             </span>
           </div>
         </div>
         <Button asChild className="w-full">
-          <Link href={`/events/${event.id}`}>View Details</Link>
+          <Link href={`/events/${event.id}`}>{t('actions.viewDetails')}</Link>
         </Button>
       </CardContent>
     </Card>

@@ -3,7 +3,12 @@
     "title": "Відкрийте події",
     "description": "Знайдіть і приєднайтеся до чудових подій у вашому районі",
     "noEvents": "Події не знайдено. Спробуйте змінити фільтри.",
-    "failedToLoad": "Не вдалося завантажити події"
+    "failedToLoad": "Не вдалося завантажити події",
+    "pagination": {
+      "previous": "Назад",
+      "next": "Далі",
+      "pageInfo": "Сторінка {page} з {totalPages}"
+    }
   },
   "detail": {
     "backToEvents": "← Назад до подій",
@@ -105,6 +110,13 @@
     "categoryPlaceholder": "Виберіть категорію"
   },
   "filters": {
-    "allCategories": "Всі категорії"
+    "allCategories": "Всі категорії",
+    "search": {
+      "placeholder": "Пошук подій..."
+    },
+    "date": {
+      "placeholder": "Фільтр за датою"
+    },
+    "clearAll": "Очистити всі фільтри"
   }
 }

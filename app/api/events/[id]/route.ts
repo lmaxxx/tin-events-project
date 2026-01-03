@@ -4,7 +4,7 @@ import { eq, count } from 'drizzle-orm';
 import { withAuth } from '@/lib/auth/middleware';
 import { updateEventSchema } from '@/lib/validation/schemas';
 import { canManageEvent } from '@/lib/auth/permissions';
-import { NotFoundError, ForbiddenError, handleApiError } from '@/lib/errors';
+import { NotFoundError, ForbiddenError, ConflictError, handleApiError } from '@/lib/errors';
 import type { ApiResponse } from '@/lib/types/auth';
 
 // GET /api/events/[id] - Public, get single event with full details
@@ -125,6 +125,24 @@ export const PATCH = withAuth(
       }
 
       const updateData = validationResult.data;
+
+      // Validate capacity reduction if capacity is being changed
+      if (updateData.capacity !== undefined && updateData.capacity !== existingEvent.capacity) {
+        // Fetch current visitor count
+        const [visitorCountResult] = await db
+          .select({ count: count() })
+          .from(eventVisitors)
+          .where(eq(eventVisitors.eventId, id));
+
+        const currentVisitors = visitorCountResult?.count || 0;
+
+        // Validate: new capacity must be >= current registrations
+        if (currentVisitors > updateData.capacity) {
+          throw new ConflictError(
+            `Cannot reduce capacity below current registrations (${currentVisitors} registered)`
+          );
+        }
+      }
 
       // Update event
       const [updatedEvent] = await db

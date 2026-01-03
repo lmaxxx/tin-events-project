@@ -10,6 +10,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { DateTimePicker } from '@/components/ui/date-time-picker';
 import { Field, FieldError, FieldLabel } from '@/components/ui/field';
+import { useTranslations } from 'next-intl';
 
 interface EventFormProps {
   defaultValues?: Partial<CreateEventInput>;
@@ -19,6 +20,8 @@ interface EventFormProps {
 }
 
 export function EventForm({ defaultValues, onSubmit, isLoading, submitText = 'Create Event' }: EventFormProps) {
+  const t = useTranslations('events.form');
+  const tCommon = useTranslations('common');
   const { data: categories, isLoading: categoriesLoading } = useCategories();
 
   const {
@@ -43,16 +46,13 @@ export function EventForm({ defaultValues, onSubmit, isLoading, submitText = 'Cr
   const selectedCategory = watch('categoryId');
   const date = watch('date');
 
-  console.log(date)
-  console.log(typeof date)
-
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       <Field>
-        <FieldLabel htmlFor="title">Event Title</FieldLabel>
+        <FieldLabel htmlFor="title">{t('title')}</FieldLabel>
         <Input
           id="title"
-          placeholder="Enter event title"
+          placeholder={t('titlePlaceholder')}
           {...register('title')}
           aria-invalid={!!errors.title}
         />
@@ -60,10 +60,10 @@ export function EventForm({ defaultValues, onSubmit, isLoading, submitText = 'Cr
       </Field>
 
       <Field>
-        <FieldLabel htmlFor="description">Description</FieldLabel>
+        <FieldLabel htmlFor="description">{t('description')}</FieldLabel>
         <Textarea
           id="description"
-          placeholder="Describe your event"
+          placeholder={t('descriptionPlaceholder')}
           rows={6}
           {...register('description')}
           aria-invalid={!!errors.description}
@@ -73,7 +73,7 @@ export function EventForm({ defaultValues, onSubmit, isLoading, submitText = 'Cr
 
       <div className="grid md:grid-cols-2 gap-6">
         <Field>
-          <FieldLabel htmlFor="date">Date & Time</FieldLabel>
+          <FieldLabel htmlFor="date">{tCommon('fields.dateTime')}</FieldLabel>
           <DateTimePicker
             value={date}
             onChange={(value) => setValue('date', value, { shouldValidate: true })}
@@ -84,11 +84,11 @@ export function EventForm({ defaultValues, onSubmit, isLoading, submitText = 'Cr
         </Field>
 
         <Field>
-          <FieldLabel htmlFor="capacity">Capacity</FieldLabel>
+          <FieldLabel htmlFor="capacity">{tCommon('fields.capacity')}</FieldLabel>
           <Input
             id="capacity"
             type="number"
-            placeholder="Maximum attendees"
+            placeholder={t('capacityPlaceholder')}
             {...register('capacity', { valueAsNumber: true })}
             aria-invalid={!!errors.capacity}
           />
@@ -97,10 +97,10 @@ export function EventForm({ defaultValues, onSubmit, isLoading, submitText = 'Cr
       </div>
 
       <Field>
-        <FieldLabel htmlFor="location">Location</FieldLabel>
+        <FieldLabel htmlFor="location">{tCommon('fields.location')}</FieldLabel>
         <Input
           id="location"
-          placeholder="Event location or address"
+          placeholder={t('locationPlaceholder')}
           {...register('location')}
           aria-invalid={!!errors.location}
         />
@@ -108,11 +108,11 @@ export function EventForm({ defaultValues, onSubmit, isLoading, submitText = 'Cr
       </Field>
 
       <Field>
-        <FieldLabel htmlFor="imageUrl">Image URL (optional)</FieldLabel>
+        <FieldLabel htmlFor="imageUrl">{t('imageUrl')}</FieldLabel>
         <Input
           id="imageUrl"
           type="url"
-          placeholder="https://example.com/image.jpg"
+          placeholder={t('imageUrlPlaceholder')}
           {...register('imageUrl')}
           aria-invalid={!!errors.imageUrl}
         />
@@ -120,14 +120,14 @@ export function EventForm({ defaultValues, onSubmit, isLoading, submitText = 'Cr
       </Field>
 
       <Field>
-        <FieldLabel htmlFor="category">Category</FieldLabel>
+        <FieldLabel htmlFor="category">{tCommon('fields.category')}</FieldLabel>
         <Select
           value={selectedCategory}
           onValueChange={(value) => setValue('categoryId', value, { shouldValidate: true })}
           disabled={categoriesLoading}
         >
           <SelectTrigger id="category" aria-invalid={!!errors.categoryId}>
-            <SelectValue placeholder="Select a category" />
+            <SelectValue placeholder={t('categoryPlaceholder')} />
           </SelectTrigger>
           <SelectContent>
             {categories?.map((category) => (
@@ -142,7 +142,7 @@ export function EventForm({ defaultValues, onSubmit, isLoading, submitText = 'Cr
 
       <div className="flex gap-3 pt-4">
         <Button type="submit" disabled={isLoading || categoriesLoading} className="flex-1">
-          {isLoading ? 'Saving...' : submitText}
+          {isLoading ? tCommon('actions.saving') : submitText}
         </Button>
       </div>
     </form>

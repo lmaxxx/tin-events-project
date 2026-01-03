@@ -11,6 +11,7 @@ import { EventCardSkeleton } from '@/components/ui/skeleton';
 
 export default function HomePage() {
   const t = useTranslations('events.list');
+  const tCommon = useTranslations('common');
   const [selectedCategory, setSelectedCategory] = useState<string | undefined>();
   const [searchQuery, setSearchQuery] = useState('');
   const [dateFilter, setDateFilter] = useState<Date | undefined>();
@@ -19,13 +20,16 @@ export default function HomePage() {
 
   const debouncedSearch = useDebounce(searchQuery, 300);
 
-  const { data, isLoading, error } = useEvents({
+  const { data: response, isLoading, error } = useEvents({
     page,
     pageSize,
     categoryId: selectedCategory,
     search: debouncedSearch,
     date: dateFilter,
   });
+
+  const events = response?.data || [];
+  const pagination = response?.pagination;
 
   if (error) {
     return (
@@ -61,35 +65,35 @@ export default function HomePage() {
             <EventCardSkeleton key={i} />
           ))}
         </div>
-      ) : data && data?.length > 0 ? (
+      ) : events.length > 0 ? (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {data.map((event) => (
+            {events.map((event) => (
               <EventCard key={event.id} event={event} />
             ))}
           </div>
 
-          {/*{data.pagination && data.pagination.totalPages > 1 && (*/}
-          {/*  <div className="flex items-center justify-center gap-2 pt-4">*/}
-          {/*    <Button*/}
-          {/*      variant="outline"*/}
-          {/*      onClick={() => setPage((p) => Math.max(1, p - 1))}*/}
-          {/*      disabled={page === 1}*/}
-          {/*    >*/}
-          {/*      Previous*/}
-          {/*    </Button>*/}
-          {/*    <span className="text-sm text-neutral-600 dark:text-neutral-400">*/}
-          {/*      Page {page} of {data.pagination.totalPages}*/}
-          {/*    </span>*/}
-          {/*    <Button*/}
-          {/*      variant="outline"*/}
-          {/*      onClick={() => setPage((p) => p + 1)}*/}
-          {/*      disabled={page >= data.pagination.totalPages}*/}
-          {/*    >*/}
-          {/*      Next*/}
-          {/*    </Button>*/}
-          {/*  </div>*/}
-          {/*)}*/}
+          {pagination && pagination.totalPages > 1 && (
+            <div className="flex items-center justify-center gap-2 pt-4">
+              <Button
+                variant="outline"
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+                disabled={page === 1}
+              >
+                {t('pagination.previous')}
+              </Button>
+              <span className="text-sm text-neutral-600 dark:text-neutral-400">
+                {t('pagination.pageInfo', { page, totalPages: pagination.totalPages })}
+              </span>
+              <Button
+                variant="outline"
+                onClick={() => setPage((p) => Math.min(pagination.totalPages, p + 1))}
+                disabled={page >= pagination.totalPages}
+              >
+                {t('pagination.next')}
+              </Button>
+            </div>
+          )}
         </>
       ) : (
         <div className="text-center py-12">

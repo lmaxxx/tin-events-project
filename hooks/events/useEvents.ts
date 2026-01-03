@@ -42,6 +42,16 @@ interface EventsFilters {
   date?: Date;
 }
 
+interface EventsResponse {
+  data: Event[];
+  pagination: {
+    page: number;
+    pageSize: number;
+    total: number;
+    totalPages: number;
+  };
+}
+
 // Get paginated events list
 export function useEvents(filters?: EventsFilters) {
   const params = new URLSearchParams();
@@ -51,10 +61,16 @@ export function useEvents(filters?: EventsFilters) {
   if (filters?.search) params.set('search', filters.search);
   if (filters?.date) params.set('date', format(filters.date, 'yyyy-MM-dd'));
 
-  return useQuery({
+  return useQuery<EventsResponse>({
     queryKey: ['events', filters],
-    queryFn: () =>
-      apiClient.get<Event[]>(`/api/events?${params.toString()}`),
+    queryFn: async () => {
+      const response = await fetch(`/api/events?${params.toString()}`);
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || 'Failed to fetch events');
+      }
+      return response.json();
+    },
     staleTime: 30000,
   });
 }

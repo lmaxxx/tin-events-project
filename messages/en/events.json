@@ -3,7 +3,12 @@
     "title": "Discover Events",
     "description": "Find and join amazing events in your area",
     "noEvents": "No events found. Try changing your filters.",
-    "failedToLoad": "Failed to load events"
+    "failedToLoad": "Failed to load events",
+    "pagination": {
+      "previous": "Previous",
+      "next": "Next",
+      "pageInfo": "Page {page} of {totalPages}"
+    }
   },
   "detail": {
     "backToEvents": "← Back to Events",
@@ -105,6 +110,13 @@
     "categoryPlaceholder": "Select a category"
   },
   "filters": {
-    "allCategories": "All Categories"
+    "allCategories": "All Categories",
+    "search": {
+      "placeholder": "Search events..."
+    },
+    "date": {
+      "placeholder": "Filter by date"
+    },
+    "clearAll": "Clear all filters"
   }
 }

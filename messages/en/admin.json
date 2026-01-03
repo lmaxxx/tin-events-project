@@ -1,10 +1,16 @@
 {
   "nav": {
+    "title": "Admin Panel",
     "dashboard": "Dashboard",
     "users": "Users",
     "events": "Events",
     "categories": "Categories",
     "backToSite": "Back to Site"
+  },
+  "accessDenied": {
+    "title": "Access Denied",
+    "description": "You need administrator privileges to access this area.",
+    "backToHome": "Back to Home"
   },
   "dashboard": {
     "title": "Dashboard",

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db, events, eventVisitors, users } from '@/db';
-import { eq, and, sql } from 'drizzle-orm';
+import { eq, and, count } from 'drizzle-orm';
 import { withAuth } from '@/lib/auth/middleware';
 import { canManageEventParticipants } from '@/lib/auth/permissions';
 import { NotFoundError, ForbiddenError, ConflictError, handleApiError } from '@/lib/errors';
@@ -80,20 +80,26 @@ export const POST = withAuth(
         throw new ConflictError('User is already registered for this event');
       }
 
-      // 6. Check event capacity
-      const [visitorCount] = await db
-        .select({ count: sql<number>`count(*)` })
-        .from(eventVisitors)
-        .where(eq(eventVisitors.eventId, id));
+      // 6. Check event capacity and add participant atomically to prevent race conditions
+      await db.transaction(async (tx) => {
+        // Count current visitors within transaction
+        const [visitorCountResult] = await tx
+          .select({ count: count() })
+          .from(eventVisitors)
+          .where(eq(eventVisitors.eventId, id));
 
-      if (visitorCount.count >= event.capacity) {
-        throw new ConflictError('Event is at full capacity');
-      }
+        const currentVisitors = visitorCountResult?.count || 0;
 
-      // 7. Add participant
-      await db.insert(eventVisitors).values({
-        eventId: id,
-        userId,
+        // Check capacity
+        if (currentVisitors >= event.capacity) {
+          throw new ConflictError('Event is at full capacity');
+        }
+
+        // 7. Add participant (atomically)
+        await tx.insert(eventVisitors).values({
+          eventId: id,
+          userId,
+        });
       });
 
       return NextResponse.json<ApiResponse>(

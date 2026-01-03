@@ -51,22 +51,26 @@ export const POST = withAuth(
         throw new ConflictError('You are already registered for this event');
       }
 
-      // Check event capacity
-      const [visitorCountResult] = await db
-        .select({ count: count() })
-        .from(eventVisitors)
-        .where(eq(eventVisitors.eventId, id));
+      // Check event capacity and register atomically to prevent race conditions
+      await db.transaction(async (tx) => {
+        // Count current visitors within transaction
+        const [visitorCountResult] = await tx
+          .select({ count: count() })
+          .from(eventVisitors)
+          .where(eq(eventVisitors.eventId, id));
 
-      const currentVisitors = visitorCountResult?.count || 0;
+        const currentVisitors = visitorCountResult?.count || 0;
 
-      if (currentVisitors >= event.capacity) {
-        throw new ConflictError('Event is at full capacity');
-      }
+        // Check capacity
+        if (currentVisitors >= event.capacity) {
+          throw new ConflictError('Event is at full capacity');
+        }
 
-      // Register user for event
-      await db.insert(eventVisitors).values({
-        eventId: id,
-        userId: user.id,
+        // Register user for event (atomically)
+        await tx.insert(eventVisitors).values({
+          eventId: id,
+          userId: user.id,
+        });
       });
 
       return NextResponse.json<ApiResponse>(

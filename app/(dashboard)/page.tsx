@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { useEvents } from '@/hooks/events/useEvents';
 import { useDebounce } from '@/hooks/useDebounce';
@@ -19,6 +19,11 @@ export default function HomePage() {
   const pageSize = 12;
 
   const debouncedSearch = useDebounce(searchQuery, 300);
+
+  // Reset page to 1 whenever filters change
+  useEffect(() => {
+    setPage(1);
+  }, [selectedCategory, searchQuery, dateFilter]);
 
   const { data: response, isLoading, error } = useEvents({
     page,

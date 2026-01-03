@@ -44,7 +44,8 @@
   },
   "status": {
     "full": "Full",
-    "eventFull": "Event Full"
+    "eventFull": "Event Full",
+    "eventEnded": "Event Ended"
   },
   "misc": {
     "attendees": "{count, plural, =0 {No attendees} =1 {1 attendee} other {# attendees}}",

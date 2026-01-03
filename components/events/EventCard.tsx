@@ -29,11 +29,12 @@ export function EventCard({ event }: EventCardProps) {
   const { locale } = useLocale();
   const eventDate = new Date(event.date);
   const isFull = event.visitorCount >= event.capacity;
+  const isPastEvent = eventDate < new Date();
 
   return (
-    <Card className="overflow-hidden p-0 pb-4 hover:shadow-lg transition-shadow">
-      {event.imageUrl && (
-        <div className="aspect-video overflow-hidden bg-neutral-100 dark:bg-neutral-800 relative">
+    <Card className="overflow-hidden p-0 pb-4 hover:shadow-lg transition-shadow flex flex-col">
+      <div className="aspect-video overflow-hidden bg-neutral-100 dark:bg-neutral-800 relative">
+        {event.imageUrl ? (
           <Image
             src={event.imageUrl}
             alt={event.title}
@@ -42,16 +43,36 @@ export function EventCard({ event }: EventCardProps) {
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             loading="lazy"
           />
-        </div>
-      )}
-      <CardHeader className="space-y-2">
+        ) : (
+          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-neutral-100 to-neutral-200 dark:from-neutral-800 dark:to-neutral-900">
+            <svg
+              className="w-16 h-16 text-neutral-300 dark:text-neutral-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1.5}
+                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+              />
+            </svg>
+          </div>
+        )}
+      </div>
+      <CardHeader className="space-y-2 flex-1">
         <div className="flex items-start justify-between gap-2">
           <h3 className="font-semibold text-lg line-clamp-2">{event.title}</h3>
-          <Badge variant={isFull ? 'destructive' : 'default'}>
-            {event.category.name}
-          </Badge>
+          <div className="flex flex-col gap-1">
+            <Badge variant="default">
+              {event.category.name}
+            </Badge>
+            {isPastEvent && <Badge variant="secondary" className="text-xs">{t('status.eventEnded')}</Badge>}
+            {!isPastEvent && isFull && <Badge variant="destructive" className="text-xs">{t('status.full')}</Badge>}
+          </div>
         </div>
-        <p className="text-sm text-neutral-600 dark:text-neutral-400 line-clamp-2">
+        <p className="text-sm text-neutral-600 dark:text-neutral-400 line-clamp-2 min-h-[2.5rem]">
           {event.description}
         </p>
       </CardHeader>
@@ -118,7 +139,7 @@ export function EventCard({ event }: EventCardProps) {
             </svg>
             <span>
               {event.visitorCount}/{event.capacity} {t('misc.attendees', { count: event.visitorCount })}
-              {isFull && <span className="ml-1 text-red-600 dark:text-red-400">({t('status.full')})</span>}
+              {!isPastEvent && isFull && <span className="ml-1 text-red-600 dark:text-red-400">({t('status.full')})</span>}
             </span>
           </div>
         </div>

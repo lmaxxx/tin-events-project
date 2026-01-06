@@ -9,7 +9,6 @@
     "lint": "eslint",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
-    "db:seed": "tsx db/seed.ts",
     "db:seed-full": "sqlite3 sqlite.db < db/seed-full.sql",
     "db:studio": "drizzle-kit studio",
     "seed:all": "bash scripts/seed-all.sh",

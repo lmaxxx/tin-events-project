@@ -39,11 +39,16 @@ INSERT INTO event_categories (id, name, description, created_at) VALUES
   ('bt6uo0xfpb1npf3z7gc8gi6j', 'Sports & Fitness', 'Sports events, fitness classes, and outdoor activities', 1704067200),
   ('lk9m2n5p8q3r7t4v1w6x0y2z', 'Technology', 'Tech conferences, workshops, and meetups', 1704067200);
 
--- STEP 3: Insert Additional Users (26 new users)
--- Password for all users: Password123!
--- Hash: $2b$12$7dx1TAlEVOM.gx7TcpFcXelPUroRDHvfWhjot4G8mWJolagzYTd/.
-
+-- STEP 3: Insert Demo Users (for easy login)
+-- Passwords: admin123, organizer123, user123
 INSERT INTO users (id, name, email, password, created_at, updated_at) VALUES
+  ('h1j0nv1tc1wbpxlezhlc5xy0', 'Admin User', 'admin@example.com', '$2b$12$x3dyg2Zi2FcfBIegRYcWgejCbafCz6O7bscrvLnztIvegKpphpV.O', 1704067200, 1704067200),
+  ('smcxz7ll1856kd21bwymoe1w', 'Organizer User', 'organizer@example.com', '$2b$12$8vf4T/ViIAX/xqltujzdGuuOTG/urC95xuLFUQer5oxutp1L1Jt3O', 1704067200, 1704067200),
+  ('fhm3kkh84em4m4gsl5hfaxwg', 'Regular User', 'user@example.com', '$2b$12$kMDZbUpwc4yYM4RrkDStCeL.hZd3uWUbCjXWyigPyIurxvGs8yLHW', 1704067200, 1704067200),
+
+  -- Additional Users (26 new users)
+  -- Password for all additional users: Password123!
+  -- Hash: $2b$12$7dx1TAlEVOM.gx7TcpFcXelPUroRDHvfWhjot4G8mWJolagzYTd/.
   -- Admins (5 additional)
   ('clx7a1b2c3d4e5f6g7h8i9j0', 'Sarah Johnson', 'sarah.johnson@example.com', '$2b$12$7dx1TAlEVOM.gx7TcpFcXelPUroRDHvfWhjot4G8mWJolagzYTd/.', 1721042400, 1721042400),
   ('clx7a2b3c4d5e6f7g8h9i0j1', 'Michael Chen', 'michael.chen@example.com', '$2b$12$7dx1TAlEVOM.gx7TcpFcXelPUroRDHvfWhjot4G8mWJolagzYTd/.', 1722516000, 1722516000),
@@ -78,7 +83,14 @@ INSERT INTO users (id, name, email, password, created_at, updated_at) VALUES
 
 -- STEP 4: Assign User Roles
 INSERT INTO user_roles (user_id, role_id) VALUES
-  -- Admins
+  -- Demo Accounts
+  ('h1j0nv1tc1wbpxlezhlc5xy0', 'geq9fton2tvwjl2tdn4hffv8'), -- Admin User - admin role
+  ('h1j0nv1tc1wbpxlezhlc5xy0', 'ic3a4xkat1b8fm8mrw1wod2k'), -- Admin User - also user role
+  ('smcxz7ll1856kd21bwymoe1w', 'w47ift6viub6gfjju4lzxd7k'), -- Organizer User - organizer role
+  ('smcxz7ll1856kd21bwymoe1w', 'ic3a4xkat1b8fm8mrw1wod2k'), -- Organizer User - also user role
+  ('fhm3kkh84em4m4gsl5hfaxwg', 'ic3a4xkat1b8fm8mrw1wod2k'), -- Regular User - user role
+
+  -- Additional Admins
   ('clx7a1b2c3d4e5f6g7h8i9j0', 'geq9fton2tvwjl2tdn4hffv8'), -- Sarah Johnson
   ('clx7a1b2c3d4e5f6g7h8i9j0', 'ic3a4xkat1b8fm8mrw1wod2k'), -- Sarah also user
   ('clx7a2b3c4d5e6f7g8h9i0j1', 'geq9fton2tvwjl2tdn4hffv8'), -- Michael Chen

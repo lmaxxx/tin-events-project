@@ -46,8 +46,8 @@ export default function AdminEventsPage() {
     setPage(1);
   }, [debouncedSearch, dateFilter, selectedCategory]);
 
-  const events = Array.isArray(eventsData) ? eventsData : [];
-  const pagination = undefined; // Pagination not available in current implementation
+  const events = eventsData?.data || [];
+  const pagination = eventsData?.pagination;
 
   if (isLoading) {
     return (

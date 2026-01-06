@@ -6,8 +6,15 @@ import * as events from './schema/events';
 import * as categories from './schema/categories';
 import * as relations from './schema/relations';
 
-const sqlite = new Database('sqlite.db');
-sqlite.pragma('journal_mode = WAL');
+let sqlite: Database.Database;
+
+try {
+  sqlite = new Database('sqlite.db');
+  sqlite.pragma('journal_mode = WAL');
+} catch (error) {
+  console.error('Failed to initialize database:', error);
+  throw error;
+}
 
 const schema = {
   ...users,

@@ -16,7 +16,7 @@ export default function AdminDashboardPage() {
   const { data: categories, isLoading: categoriesLoading } = useCategories();
 
   const totalUsers = usersData?.pagination?.total || 0;
-  const totalEvents = Array.isArray(eventsData) ? eventsData.length : 0;
+  const totalEvents = eventsData?.pagination?.total || 0;
   const totalCategories = categories?.length || 0;
 
   const isLoading = usersLoading || eventsLoading || categoriesLoading;

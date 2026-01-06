@@ -6,9 +6,19 @@
 -- Target: 30 users, 50 events, ~200 registrations
 -- ================================================
 
+-- STEP 0: Clear and Create Roles
+DELETE FROM roles;
+
+INSERT INTO roles (id, name, description) VALUES
+  ('vw8xf2qpj9n5r3k1m4h7t6z0', 'guest', 'Can browse events only'),
+  ('ic3a4xkat1b8fm8mrw1wod2k', 'user', 'Can browse and register for events'),
+  ('w47ift6viub6gfjju4lzxd7k', 'organizer', 'Can create and manage own events'),
+  ('geq9fton2tvwjl2tdn4hffv8', 'admin', 'Full system access');
+
 -- STEP 1: Clear existing data (preserve demo users created by TypeScript seed)
 DELETE FROM event_visitors;
 DELETE FROM events;
+DELETE FROM event_categories;
 -- Preserve user_roles for demo accounts (admin@example.com, organizer@example.com, user@example.com)
 DELETE FROM user_roles WHERE user_id NOT IN (
   SELECT id FROM users WHERE email IN ('admin@example.com', 'organizer@example.com', 'user@example.com')
@@ -16,7 +26,20 @@ DELETE FROM user_roles WHERE user_id NOT IN (
 -- Preserve demo accounts created by TypeScript seed
 DELETE FROM users WHERE email NOT IN ('admin@example.com', 'organizer@example.com', 'user@example.com');
 
--- STEP 2: Insert Additional Users (26 new users)
+-- STEP 2: Create Event Categories
+INSERT INTO event_categories (id, name, description, created_at) VALUES
+  ('xn5qzbm81vq6u8xa3s9z20qp', 'Arts & Culture', 'Art exhibitions, cultural events, and performances', 1704067200),
+  ('u4vvv7jb1arjr2sztzvjac6f', 'Business', 'Business networking and professional development', 1704067200),
+  ('aud70w31cflp9u9fyz3549nf', 'Education', 'Workshops, seminars, and educational events', 1704067200),
+  ('mjldgkm833dzwjhy4cjoji47', 'Entertainment', 'Comedy shows, theater, and entertainment events', 1704067200),
+  ('tmzcj46yw8ct2m7m98hp2shq', 'Food & Drink', 'Food festivals, cooking classes, and tastings', 1704067200),
+  ('qnw54b4n7tfg8dfo9xxvxwy4', 'Health & Wellness', 'Wellness workshops, yoga, and health seminars', 1704067200),
+  ('duiebkh8d60bzhp3865erwt1', 'Music', 'Concerts, music festivals, and live performances', 1704067200),
+  ('b2sk1czsebrzeuhkhje0q3p9', 'Networking', 'Professional networking and community building', 1704067200),
+  ('bt6uo0xfpb1npf3z7gc8gi6j', 'Sports & Fitness', 'Sports events, fitness classes, and outdoor activities', 1704067200),
+  ('lk9m2n5p8q3r7t4v1w6x0y2z', 'Technology', 'Tech conferences, workshops, and meetups', 1704067200);
+
+-- STEP 3: Insert Additional Users (26 new users)
 -- Password for all users: Password123!
 -- Hash: $2b$12$7dx1TAlEVOM.gx7TcpFcXelPUroRDHvfWhjot4G8mWJolagzYTd/.
 
@@ -53,7 +76,7 @@ INSERT INTO users (id, name, email, password, created_at, updated_at) VALUES
   ('clx7c0d1e2f3g4h5i6j7k8l9', 'Lisa Wright', 'lisa.wright@example.com', '$2b$12$7dx1TAlEVOM.gx7TcpFcXelPUroRDHvfWhjot4G8mWJolagzYTd/.', 1733061300, 1733061300),
   ('clx7d1e2f3g4h5i6j7k8l9m0', 'Paul Scott', 'paul.scott@example.com', '$2b$12$7dx1TAlEVOM.gx7TcpFcXelPUroRDHvfWhjot4G8mWJolagzYTd/.', 1733401800, 1733401800);
 
--- STEP 3: Assign User Roles
+-- STEP 4: Assign User Roles
 INSERT INTO user_roles (user_id, role_id) VALUES
   -- Admins
   ('clx7a1b2c3d4e5f6g7h8i9j0', 'geq9fton2tvwjl2tdn4hffv8'), -- Sarah Johnson
@@ -102,7 +125,7 @@ INSERT INTO user_roles (user_id, role_id) VALUES
   ('clx7c0d1e2f3g4h5i6j7k8l9', 'ic3a4xkat1b8fm8mrw1wod2k'), -- Lisa Wright
   ('clx7d1e2f3g4h5i6j7k8l9m0', 'ic3a4xkat1b8fm8mrw1wod2k'); -- Paul Scott
 
--- STEP 4: Insert Events (50 events across 9 categories)
+-- STEP 5: Insert Events (50 events across 9 categories)
 INSERT INTO events (id, title, description, date, image_url, capacity, location, creator_id, category_id, created_at, updated_at) VALUES
   -- Arts & Culture (6 events)
   ('clxe1a2b3c4d5e6f7g8h9i0j', 'Contemporary Art Exhibition', 'Explore modern art from emerging artists featuring paintings, sculptures, and digital installations.', 1738105200, 'https://picsum.photos/800/600?random=1', 80, 'City Art Gallery, 123 Art Street, Downtown', 'clx7b1c2d3e4f5g6h7i8j9k0', 'xn5qzbm81vq6u8xa3s9z20qp', 1730451600, 1730451600),
@@ -172,7 +195,7 @@ INSERT INTO events (id, title, description, date, image_url, capacity, location,
   ('clxi9a0b1c2d3e4f5g6h7i8j', 'Tennis Clinic for Beginners', 'Learn tennis fundamentals including serving, forehand, backhand, and court positioning.', 1795734000, 'https://picsum.photos/800/600?random=49', 20, 'Tennis Club, 345 Racquet Avenue, Sports Park', 'clx7b7c8d9e0f1g2h3i4j5k6', 'bt6uo0xfpb1npf3z7gc8gi6j', 1746691500, 1746691500),
   ('clxj0a1b2c3d4e5f6g7h8i9j', 'Hiking Adventure Trip', 'Guided day hike through mountain trails with experienced guides and packed lunch included.', 1796857200, 'https://picsum.photos/800/600?random=50', 35, 'Trailhead Parking, 456 Mountain Road, National Park', 'clx7b8c9d0e1f2g3h4i5j6k7', 'bt6uo0xfpb1npf3z7gc8gi6j', 1749967200, 1749967200);
 
--- STEP 5: Insert Event Registrations (~200 registrations)
+-- STEP 6: Insert Event Registrations (~200 registrations)
 -- Distribution: Past events (60-95% capacity), Current events (40-80%), Near-future (30-60%), Far-future (10-40%)
 
 INSERT INTO event_visitors (event_id, user_id, registered_at) VALUES
@@ -411,19 +434,19 @@ INSERT INTO event_visitors (event_id, user_id, registered_at) VALUES
   ('clxi3a4b5c6d7e8f9g0h1i2j', 'clx7c3d4e5f6g7h8i9j0k1l2', 1744315800),
   ('clxi4a5b6c7d8e9f0g1h2i3j', 'clx7c4d5e6f7g8h9i0j1k2l3', 1747280400);
 
--- STEP 6: Verification Queries
+-- STEP 7: Verification Queries
 SELECT '=== DATABASE SEED VERIFICATION ===' as message;
-SELECT 'Users' as table_name, COUNT(*) as count FROM users
+SELECT 'Roles' as table_name, COUNT(*) as count FROM roles
+UNION ALL
+SELECT 'Categories', COUNT(*) FROM event_categories
+UNION ALL
+SELECT 'Users', COUNT(*) FROM users
 UNION ALL
 SELECT 'User Roles', COUNT(*) FROM user_roles
 UNION ALL
 SELECT 'Events', COUNT(*) FROM events
 UNION ALL
-SELECT 'Event Visitors', COUNT(*) FROM event_visitors
-UNION ALL
-SELECT 'Categories', COUNT(*) FROM event_categories
-UNION ALL
-SELECT 'Roles', COUNT(*) FROM roles;
+SELECT 'Event Visitors', COUNT(*) FROM event_visitors;
 
 -- Show sample of created events
 SELECT '=== SAMPLE EVENTS ===' as message;

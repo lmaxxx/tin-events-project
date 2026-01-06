@@ -6,9 +6,6 @@ echo "🌱 Seeding database..."
 # Run migrations (creates schema)
 npm run db:migrate
 
-# Seed basic data (roles, categories, 3 users)
-npm run db:seed
-
 # Seed full data (30 users, 50 events, registrations)
 npm run db:seed-full
 
